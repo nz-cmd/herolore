@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERA OF VILLAINS - Official Archive</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+KR:wght@500;700;900&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-yellow: #fff3c4;
+    --comic-red: #e53935;
+    --comic-blue: #1e88e5;
+    --comic-purple: #8e24aa;
+    --comic-green: #43a047;
+    --comic-gold: #ffd600;
+    --ink: #111111;
+  }
+  * { box-sizing: border-box; user-select: none; }
+  body {
+    margin: 0; padding: 0;
+    background-color: #151515;
+    background-image: 
+      radial-gradient(rgba(255, 214, 0, 0.12) 2px, transparent 2px),
+      repeating-conic-gradient(#151515 0% 25%, #1f1f1f 0% 50%);
+    background-size: 16px 16px, 100% 100%;
+    font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* 구글 번역 상단 배너 숨김 */
+  .goog-te-banner-frame.skiptranslate { display: none !important; }
+  body { top: 0px !important; }
+  #google_translate_element { display: none; }
+
+  /* 메인 코믹북 래퍼 */
+  .comic-wrapper {
+    max-width: 1180px;
+    margin: 20px auto 95px auto;
+    background: var(--bg-yellow);
+    background-image: radial-gradient(rgba(0,0,0,0.14) 1.5px, transparent 1.8px);
+    background-size: 8px 8px;
+    border: 4px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 10px 10px 0 var(--ink);
+    padding: 18px;
+    min-height: 85vh;
+    position: relative;
+  }
+
+  /* 애니메이션 */
+  @keyframes comicPop {
+    0% { transform: scale(0.85) rotate(-2deg); opacity: 0; }
+    60% { transform: scale(1.03) rotate(0.5deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  @keyframes hitShake {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    20% { transform: translate(-12px, -8px) rotate(-4deg); }
+    40% { transform: translate(12px, 6px) rotate(4deg); }
+    60% { transform: translate(-8px, 8px) rotate(-2deg); }
+    80% { transform: translate(8px, -6px) rotate(2deg); }
+  }
+  @keyframes powBurst {
+    0% { transform: translate(-50%, -50%) scale(0.2) rotate(-15deg); opacity: 1; }
+    60% { transform: translate(-50%, -50%) scale(1.3) rotate(8deg); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1.5) rotate(0deg); opacity: 0; }
+  }
+  .pop-anim { animation: comicPop 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards; }
+  .shake-anim { animation: hitShake 0.25s ease; }
+
+  /* 1단계: 언어 선택 게이트 */
+  #lang-gate { text-align: center; padding: 45px 15px; }
+  .gate-title {
+    display: inline-block; background: var(--comic-red); color: #fff;
+    border: 4px solid var(--ink); padding: 15px 35px;
+    font-family: 'Bangers', 'Noto Sans KR', cursive;
+    font-size: clamp(30px, 6vw, 56px); letter-spacing: 2px;
+    text-shadow: 4px 4px 0 var(--ink); box-shadow: 8px 8px 0 var(--ink);
+    transform: skew(-5deg); margin-bottom: 15px;
+  }
+  .gate-sub {
+    display: block; font-weight: 900; font-size: 15px;
+    background: var(--comic-gold); border: 3px solid var(--ink);
+    padding: 6px 18px; width: fit-content; margin: 0 auto 30px auto;
+    box-shadow: 4px 4px 0 var(--ink); transform: skew(-4deg);
+  }
+  .lang-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px; max-width: 720px; margin: 0 auto;
+  }
+  .comic-btn {
+    background: #fff; color: var(--ink); border: 3px solid var(--ink);
+    padding: 13px 16px; font-size: 16px; font-weight: 900;
+    cursor: pointer; box-shadow: 5px 5px 0 var(--ink);
+    transform: skew(-6deg); transition: 0.15s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .comic-btn:hover { background: var(--comic-gold); transform: skew(-6deg) translate(-3px, -3px); box-shadow: 8px 8px 0 var(--ink); }
+
+  /* 1.5단계: 미니게임 (빌런 10회 격파 배틀) */
+  #battle-gate {
+    display: none; text-align: center; padding: 20px 10px; position: relative;
+  }
+  .battle-banner {
+    background: #111; color: var(--comic-gold); border: 3px solid var(--ink);
+    display: inline-block; padding: 6px 20px; font-weight: 900; font-size: 18px;
+    transform: skew(-6deg); box-shadow: 4px 4px 0 var(--comic-red); margin-bottom: 12px;
+  }
+  .villain-arena {
+    max-width: 340px; margin: 0 auto; background: #2b1b3d; color: #fff;
+    border: 4px solid var(--ink); padding: 14px; box-shadow: 8px 8px 0 var(--ink);
+    position: relative; cursor: crosshair;
+  }
+  .hp-bar-outer {
+    width: 100%; height: 24px; background: #111; border: 3px solid #fff;
+    margin-bottom: 10px; position: relative; overflow: hidden;
+  }
+  .hp-bar-inner {
+    width: 100%; height: 100%; background: linear-gradient(90deg, #ff1744, #ff9100);
+    transition: width 0.12s ease;
+  }
+  .hp-text {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    font-size: 12px; font-weight: 900; line-height: 18px; color: #fff;
+    text-shadow: 1px 1px 0 #000;
+  }
+  .villain-target-img {
+    width: 100%; aspect-ratio: 1/1; object-fit: cover;
+    border: 3px solid var(--comic-gold); display: block;
+    pointer-events: none;
+  }
+  .pow-fx {
+    position: fixed; pointer-events: none; z-index: 9999;
+    background: var(--comic-gold); color: var(--comic-red);
+    border: 3px solid #111; padding: 6px 14px;
+    font-family: 'Bangers', 'Noto Sans KR', cursive;
+    font-size: 32px; font-weight: 900; text-shadow: 2px 2px 0 #111;
+    box-shadow: 4px 4px 0 #111;
+    animation: powBurst 0.45s forwards;
+  }
+  .ko-stamp {
+    display: none; position: absolute; top: 45%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-12deg);
+    background: var(--comic-red); color: #fff; border: 4px solid #fff;
+    padding: 10px 28px; font-size: 42px; font-weight: 900;
+    font-family: 'Bangers', sans-serif; letter-spacing: 3px;
+    box-shadow: 6px 6px 0 #111; z-index: 20; pointer-events: none;
+  }
+
+  /* 2단계: 메인 아카이브 */
+  #main-archive { display: none; }
+  .top-header {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+    background: var(--comic-red); color: #fff; border: 3px solid var(--ink);
+    padding: 10px 16px; box-shadow: 5px 5px 0 var(--ink); margin-bottom: 12px; gap: 10px;
+  }
+  .top-header h1 { margin: 0; font-size: clamp(18px, 3.8vw, 28px); font-weight: 900; text-shadow: 2px 2px 0 var(--ink); transform: skew(-4deg); }
+  .back-lang-btn {
+    background: var(--comic-gold); color: var(--ink); border: 2px solid var(--ink);
+    padding: 5px 10px; font-weight: 900; cursor: pointer; box-shadow: 3px 3px 0 var(--ink);
+    transform: skew(-6deg); font-size: 12px;
+  }
+
+  /* 로어북 [XX] 태그 필수 안내 배너 */
+  .lore-notice-banner {
+    background: #111; color: #fff; border: 3px solid var(--ink);
+    border-left: 10px solid var(--comic-gold); padding: 10px 14px;
+    font-size: 12.5px; line-height: 1.5; margin-bottom: 14px;
+    box-shadow: 4px 4px 0 var(--comic-red); user-select: text;
+  }
+  .code-pill {
+    background: var(--comic-gold); color: #111; font-weight: 900;
+    padding: 1px 6px; border-radius: 3px; font-family: monospace;
+  }
+
+  /* 내비게이션 탭 */
+  .nav-tabs {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;
+    border-bottom: 3px solid var(--ink); padding-bottom: 14px;
+  }
+  .tab-btn {
+    flex: 1 1 auto; min-width: 115px; background: #fff; border: 3px solid var(--ink);
+    padding: 9px 10px; font-size: 14px; font-weight: 900; cursor: pointer;
+    box-shadow: 4px 4px 0 var(--ink); transform: skew(-6deg); transition: 0.15s; text-align: center;
+  }
+  .tab-btn:hover { transform: skew(-6deg) translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+  .tab-btn.active-world { background: var(--comic-gold); color: #111; }
+  .tab-btn.active-hero { background: var(--comic-blue); color: #fff; }
+  .tab-btn.active-villain { background: var(--comic-purple); color: #fff; }
+  .tab-btn.active-civilian { background: var(--comic-green); color: #fff; }
+  .tab-btn.active-trans { background: #111; color: var(--comic-gold); }
+  .tab-btn.active-tracker { background: #ec407a; color: #fff; }
+
+  /* 거점 서브 필터 */
+  .hub-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .hub-btn {
+    background: #fff; border: 2px solid var(--ink); padding: 5px 12px;
+    font-size: 12.5px; font-weight: 900; cursor: pointer;
+    box-shadow: 2px 2px 0 var(--ink); transform: skew(-6deg);
+  }
+  .hub-btn.active { background: var(--ink); color: var(--comic-gold); }
+
+  /* 캐릭터 그리드 및 카드 */
+  .char-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(275px, 1fr)); gap: 16px;
+  }
+  .char-card {
+    background: #fff; border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--ink);
+    padding: 12px; display: flex; flex-direction: column; transition: 0.18s; user-select: text;
+  }
+  .char-card:hover { transform: translate(-4px, -4px); box-shadow: 9px 9px 0 var(--ink); }
+  .char-img-wrap {
+    width: 100%; aspect-ratio: 1/1; background: #222; border: 2px solid var(--ink);
+    margin-bottom: 10px; overflow: hidden;
+  }
+  .char-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: 0.3s; }
+  .char-card:hover .char-img-wrap img { transform: scale(1.05); }
+  .badge-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .rank-badge {
+    padding: 2px 8px; font-size: 12px; font-weight: 900; border: 2px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--ink); transform: skew(-8deg); cursor: pointer;
+  }
+  .hub-tag { font-size: 12px; font-weight: 900; color: var(--comic-red); }
+  .char-title { font-size: 18px; font-weight: 900; margin: 2px 0; }
+  .char-realname { font-size: 12.5px; color: #555; font-weight: 700; }
+  .char-meta {
+    font-size: 12px; background: #f5f5f5; border: 1px solid #ccc;
+    padding: 6px 8px; margin: 8px 0; line-height: 1.45;
+  }
+  .lore-box {
+    margin-top: auto; padding: 8px; font-size: 12px; line-height: 1.5;
+    border: 2px solid var(--ink); background: #fff9db;
+  }
+
+  /* 패널 및 트래커 박스 */
+  .info-panel {
+    background: #fff; border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink);
+    padding: 16px; margin-bottom: 16px; line-height: 1.6; user-select: text;
+  }
+  .panel-badge {
+    display: inline-block; background: var(--comic-gold); color: var(--ink);
+    border: 2px solid var(--ink); padding: 3px 10px; font-weight: 900;
+    transform: skew(-8deg); box-shadow: 2px 2px 0 var(--ink); margin-bottom: 10px; font-size: 14px;
+  }
+  .tracker-pre {
+    width: 100%; height: 230px; overflow-y: auto;
+    background: #111; color: #71b058; font-family: 'Consolas', monospace;
+    font-size: 12.5px; padding: 10px; border: 3px solid var(--ink);
+    white-space: pre-wrap; margin: 6px 0; user-select: all;
+  }
+  .copy-btn {
+    background: var(--comic-red); color: #fff; border: 2px solid var(--ink);
+    padding: 7px 14px; font-weight: 900; cursor: pointer;
+    box-shadow: 3px 3px 0 var(--ink); transform: skew(-5deg); font-size: 12.5px;
+  }
+  .copy-btn:hover { background: #b71c1c; }
+
+  /* ==================== 우측 하단 8트랙 주크박스 플레이어 ==================== */
+  .bgm-container {
+    position: fixed; bottom: 14px; right: 14px; z-index: 9000;
+  }
+  .bgm-playlist-popup {
+    display: none;
+    background: #1a1a1a;
+    border: 3px solid var(--comic-gold);
+    box-shadow: 6px 6px 0 #111;
+    margin-bottom: 8px;
+    width: 310px;
+    max-height: 280px;
+    overflow-y: auto;
+    border-radius: 6px;
+    padding: 8px;
+  }
+  .bgm-playlist-header {
+    color: var(--comic-gold); font-size: 12px; font-weight: 900;
+    border-bottom: 2px dashed #444; padding-bottom: 5px; margin-bottom: 6px;
+    display: flex; justify-content: space-between;
+  }
+  .bgm-track-item {
+    padding: 6px 8px; font-size: 11.5px; color: #ddd; font-weight: 700;
+    cursor: pointer; border-radius: 4px; margin-bottom: 3px;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: 0.12s;
+  }
+  .bgm-track-item:hover { background: #333; color: #fff; }
+  .bgm-track-item.active {
+    background: var(--comic-gold); color: #111; font-weight: 900;
+  }
+  .bgm-mood-tag {
+    font-size: 10px; padding: 1px 5px; border-radius: 3px;
+    background: #333; color: #aaa; margin-left: 6px; white-space: nowrap;
+  }
+  .bgm-track-item.active .bgm-mood-tag { background: #111; color: var(--comic-gold); }
+
+  .bgm-widget {
+    background: #111; color: var(--comic-gold); border: 3px solid var(--comic-gold);
+    box-shadow: 5px 5px 0 var(--comic-red); padding: 8px 12px;
+    display: flex; align-items: center; gap: 6px; border-radius: 6px;
+    font-size: 12px; font-weight: 900;
+  }
+  .bgm-btn {
+    background: var(--comic-gold); color: #111; border: 1px solid #111;
+    padding: 4px 8px; font-weight: 900; cursor: pointer; font-size: 11px;
+    transition: 0.12s;
+  }
+  .bgm-btn:hover { background: #fff; }
+  .bgm-title-marquee {
+    width: 155px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+    color: #71b058; font-family: 'Consolas', monospace; font-size: 11.5px;
+  }
+</style>
+</head>
+<body>
+
+<div id="google_translate_element"></div>
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'ko',
+    includedLanguages: 'ko,en,ja,zh-CN,zh-TW,es',
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<div class="comic-wrapper">
+
+  <!-- ==================== 1. 언어 선택 게이트 ==================== -->
+  <div id="lang-gate" class="pop-anim">
+    <div class="gate-title">⚡ ERA OF VILLAINS ⚡</div>
+    <div class="gate-sub">HEROES vs VILLAINS CONFIDENTIAL ARCHIVE</div>
+    <p style="font-weight:900;font-size:15px;margin-bottom:25px">Select Your Language / 언어를 선택하세요</p>
+    <div class="lang-grid">
+      <button class="comic-btn" onclick="startBattleGate('ko')">🇰🇷 한국어</button>
+      <button class="comic-btn" onclick="startBattleGate('en')">🇺🇸 English</button>
+      <button class="comic-btn" onclick="startBattleGate('ja')">🇯🇵 日本語</button>
+      <button class="comic-btn" onclick="startBattleGate('zh-CN')">🇨🇳 简体中文</button>
+      <button class="comic-btn" onclick="startBattleGate('zh-TW')">🇹🇼 繁體中文</button>
+      <button class="comic-btn" onclick="startBattleGate('es')">🇪🇸 Español</button>
+    </div>
+  </div>
+
+  <!-- ==================== 1.5. 빌런 격파 미니게임 게이트 (10회 타격) ==================== -->
+  <div id="battle-gate">
+    <div class="battle-banner">🚨 WARNING! A VILLAIN BLOCKS YOUR PATH! 🚨</div>
+    <p style="font-weight:900;font-size:14px;margin:0 0 12px 0;color:#d32f2f">
+      👇 아래 악당을 마우스로 연타(주먹질 10회)해서 때려눕히고 아카이브에 진입하세요! 👊
+    </p>
+    <div class="villain-arena" id="villain-box" onclick="punchVillain(event)">
+      <div class="ko-stamp" id="ko-stamp">💥 K.O.!! 💥</div>
+      <div class="hp-bar-outer">
+        <div class="hp-bar-inner" id="villain-hp-bar"></div>
+        <div class="hp-text" id="villain-hp-text">HP 10 / 10</div>
+      </div>
+      <img id="battle-villain-img" class="villain-target-img" src="" alt="Villain">
+      <div id="battle-villain-name" style="font-size:18px;font-weight:900;margin-top:8px;color:var(--comic-gold);"></div>
+      <div id="battle-villain-quote" style="font-size:12px;color:#ccc;margin-top:2px;"></div>
+    </div>
+    <button class="comic-btn" style="margin-top:14px;padding:6px 14px;font-size:12px;background:#eee;" onclick="openMainArchive()">SKIP (전투 건너뛰기) ⏭️</button>
+  </div>
+
+  <!-- ==================== 2. 메인 아카이브 ==================== -->
+  <div id="main-archive">
+    <div class="top-header">
+      <h1>⚡ HEROES & VILLAINS DATABASE ⚡</h1>
+      <button class="back-lang-btn" onclick="showLangGate()">🌐 LANGUAGE / 언어 변경</button>
+    </div>
+
+    <!-- 로어북 [XX] 태그 호출 규칙 상단 고정 안내 -->
+    <div class="lore-notice-banner">
+      ⚠️ <b>[필독! 캐릭터 로어북(기밀 설정) 호출 가이드]</b><br>
+      AI는 대화 중 캐릭터의 2글자 태그가 대괄호 형식(예: <span class="code-pill">[KN]</span>, <span class="code-pill">[SC]</span>, <span class="code-pill">[CN]</span>)으로 등장해야만 해당 캐릭터의 세부 로어북(목표·과거사)을 인식하고 불러옵니다! 한 번도 만나지 않아 태그가 출력된 적 없는 캐릭터는 로어북이 반영되지 않으니, 특정 인물을 먼저 언급하거나 호출할 때는 반드시 <span class="code-pill">[태그]</span>를 함께 적어주세요. (각 카드의 태그 배지를 누르면 자동 복사됩니다!)
+    </div>
+
+    <!-- 카테고리 탭 -->
+    <div class="nav-tabs">
+      <button class="tab-btn active-world" id="tab-world" onclick="switchTab('world')">🌍 세계관</button>
+      <button class="tab-btn" id="tab-hero" onclick="switchTab('hero')">🛡️ 히어로 (23)</button>
+      <button class="tab-btn" id="tab-villain" onclick="switchTab('villain')">☠️ 빌런 (18)</button>
+      <button class="tab-btn" id="tab-civilian" onclick="switchTab('civilian')">🏙️ 일반인 (7)</button>
+      <button class="tab-btn" id="tab-trans" onclick="switchTab('trans')">🌌 초월체 (3)</button>
+      <button class="tab-btn" id="tab-tracker" onclick="switchTab('tracker')">❤️‍🔥 호감도 트래커</button>
+    </div>
+
+    <!-- 거점 서브 필터 -->
+    <div id="hub-filter-bar" class="hub-filter" style="display:none;">
+      <button class="hub-btn active" onclick="filterHub('ALL', this)">🌐 전체 (ALL)</button>
+      <button class="hub-btn" onclick="filterHub('하와이', this)">🌺 하와이 본사/아카데미</button>
+      <button class="hub-btn" onclick="filterHub('서울', this)">🇰🇷 서울 (SEOUL)</button>
+      <button class="hub-btn" onclick="filterHub('도쿄', this)">🇯🇵 도쿄 (TOKYO)</button>
+      <button class="hub-btn" onclick="filterHub('뉴욕', this)">🗽 뉴욕 (NEW YORK)</button>
+    </div>
+
+    <div id="content-area" class="pop-anim"></div>
+  </div>
+
+</div>
+
+<!-- ==================== 우측 하단 8트랙 OST 주크박스 플레이어 ==================== -->
+<div class="bgm-container">
+  <div class="bgm-playlist-popup" id="bgm-playlist-box">
+    <div class="bgm-playlist-header">
+      <span>🎵 OFFICIAL OST PLAYLIST (8 TRACKS)</span>
+      <span style="cursor:pointer;color:#ff5252;" onclick="togglePlaylist()">✕</span>
+    </div>
+    <div id="bgm-track-list"></div>
+  </div>
+
+  <div class="bgm-widget">
+    <button class="bgm-btn" onclick="prevBgm()" title="이전 곡">⏮</button>
+    <button class="bgm-btn" id="bgm-toggle-btn" onclick="toggleBgm()">▶ PLAY</button>
+    <button class="bgm-btn" onclick="nextBgm()" title="다음 곡">⏭</button>
+    <div class="bgm-title-marquee" id="bgm-current-title">01. Beyond the Limit!</div>
+    <button class="bgm-btn" style="background:#e53935;color:#fff;" onclick="togglePlaylist()">📜 LIST</button>
+    <audio id="bgm-audio"></audio>
+  </div>
+</div>
+
+<script>
+// ==================== 🎵 8트랙 OST 플레이리스트 데이터 ====================
+const BGM_LIST = [
+  { title: "01. Beyond the Limit! (아카데미의 아침)", mood: "Heroic", url: "https://img.neze.org/HV/bgm/hv1.mp3" },
+  { title: "02. Kinetic Impact (최후의 방어선)", mood: "Epic", url: "https://img.neze.org/HV/bgm/hv2.mp3" },
+  { title: "03. Ascenders, Assemble! (영웅의 귀환)", mood: "Hope", url: "https://img.neze.org/HV/bgm/hv3.mp3" },
+  { title: "04. Black Halo (캡틴 네오의 그림자)", mood: "Dark", url: "https://img.neze.org/HV/bgm/hv4.mp3" },
+  { title: "05. Unbroken Heart (물러설 수 없는 일격)", mood: "Heroic", url: "https://img.neze.org/HV/bgm/hv5.mp3" },
+  { title: "06. Clash of Titans (무너지는 마천루)", mood: "Epic", url: "https://img.neze.org/HV/bgm/hv6.mp3" },
+  { title: "07. New Horizon (하와이 포탈 네트워크)", mood: "Hope", url: "https://img.neze.org/HV/bgm/hv7.mp3" },
+  { title: "08. Syndicate 'Vendetta' (빌런의 시대)", mood: "Dark", url: "https://img.neze.org/HV/bgm/hv8.mp3" }
+];
+
+let currentBgmIdx = 0;
+const audioEl = document.getElementById('bgm-audio');
+
+function initBgmPlayer() {
+  loadTrack(0, false);
+  renderPlaylist();
+  // 한 곡이 끝나면 자동으로 다음 트랙 재생
+  audioEl.addEventListener('ended', () => {
+    nextBgm();
+  });
+}
+
+function renderPlaylist() {
+  const listEl = document.getElementById('bgm-track-list');
+  listEl.innerHTML = BGM_LIST.map((t, idx) => `
+    <div class="bgm-track-item ${idx === currentBgmIdx ? 'active' : ''}" onclick="selectTrack(${idx})">
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.title}</span>
+      <span class="bgm-mood-tag">${t.mood}</span>
+    </div>
+  `).join('');
+}
+
+function loadTrack(idx, autoPlay = true) {
+  currentBgmIdx = idx;
+  audioEl.src = BGM_LIST[idx].url;
+  document.getElementById('bgm-current-title').innerText = BGM_LIST[idx].title;
+  renderPlaylist();
+  if (autoPlay) {
+    audioEl.play().then(() => {
+      document.getElementById('bgm-toggle-btn').innerText = '⏸';
+    }).catch(() => {});
+  }
+}
+
+function selectTrack(idx) {
+  loadTrack(idx, true);
+}
+
+function toggleBgm() {
+  const btn = document.getElementById('bgm-toggle-btn');
+  if (audioEl.paused) {
+    audioEl.play();
+    btn.innerText = '⏸';
+  } else {
+    audioEl.pause();
+    btn.innerText = '▶ PLAY';
+  }
+}
+
+function prevBgm() {
+  const nextIdx = (currentBgmIdx - 1 + BGM_LIST.length) % BGM_LIST.length;
+  loadTrack(nextIdx, true);
+}
+
+function nextBgm() {
+  const nextIdx = (currentBgmIdx + 1) % BGM_LIST.length;
+  loadTrack(nextIdx, true);
+}
+
+function togglePlaylist() {
+  const box = document.getElementById('bgm-playlist-box');
+  box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+}
+
+initBgmPlayer();
+
+// ==================== 캐릭터 전체 데이터베이스 (이미지 https://img.neze.org/HV/{태그}.webp 자동 매핑) ====================
+const IMG_BASE = "https://img.neze.org/HV/";
+
+const CHARACTERS = [
+  // [HEROES - HAWAII]
+  { cat:"hero", hub:"하와이", tag:"WP", rank:"B급", name:"워프", real:"아서 펜들턴", sex:"남", age:"58세", role:"하와이 본사 · 협회장", ability:"공간 도약 및 지부 간 포탈 연결", pers:"냉철함, 정치적, 노련함", lore:"세계 최초의 각성자. 유리 겔라처럼 센세이션을 일으킨 후 질서를 세우기 위해 히어로 협회를 창설했다. 현재 말기 암 판정을 받고도 이를 숨긴 채 마지막 숨이 붙어있는 날까지 전 세계 포탈 네트워크를 유지하며 후계자를 찾고 있다." },
+  { cat:"hero", hub:"하와이", tag:"SR", rank:"S급", name:"사이렌", real:"그레이스 발렌타인", sex:"여", age:"42세", role:"하와이 본사 · 히어로관리팀장", ability:"고출력 염동력", pers:"완벽주의, 통제욕, 워커홀릭", lore:"딸 베스퍼를 임신한 채 조폐국 인질극에 휘말렸을 때, 자신을 폭행하려는 강도들을 막아선 남편이 눈앞에서 살해당하자 극도의 충격으로 각성해 강도들을 몰살했다. 태아였던 베스퍼도 이 영향으로 염동력을 물려받았으며, 트라우마로 인해 딸과 히어로들을 강박적으로 통제한다." },
+  { cat:"hero", hub:"하와이", tag:"VS", rank:"S급", name:"비전", real:"레이먼드 크로스", sex:"남", age:"44세", role:"하와이 본사 · 아카데미 교장", ability:"눈에서 고열 레이저빔 발사", pers:"능글맞음, 사명감, 잔소리꾼", lore:"경찰 출신으로 '프로 히어로'라는 직업을 최초로 정립한 인물이자 초대 어센더스 리더. 워프에게 스카우트되어 협회 창립 일등공신이 되었다. 가장 친한 친구였던 캡틴 네오의 배신에 깊은 상처를 입었으며, 시가 연기 뒤로 슬픔을 감추고 후학을 양성한다." },
+  { cat:"hero", hub:"하와이", tag:"MD", rank:"S급", name:"멜트다운", real:"나타샤 보그", sex:"여", age:"38세", role:"하와이 본사 · 빌런교도소장", ability:"신체 및 접촉 사물 액체 변환", pers:"가학적, 나른함, 여유로움", lore:"극빈층 출신으로 생계형 절도를 저질러 수감된 감옥에서 끔찍한 집단 괴롭힘을 당하다 각성, 감방 동료들을 산 채로 액체로 녹여 죽였다. 워프의 설득으로 예외적으로 어센더스로 교화되었으며, 현재는 알코올에 의존하며 빌런 교도소를 가학적으로 통치한다." },
+  { cat:"hero", hub:"하와이", tag:"KN", rank:"S급", name:"키네틱", real:"마야 스톤", sex:"여", age:"30세", role:"하와이 본사 · 3대 어센더스 리더", ability:"운동에너지 흡수·증폭 방출, 비행", pers:"과묵함, 리더십, 온화함", lore:"고아 출신으로 어린 나이에 각성해 아버지 같은 워프에게 발탁되었다. 자신의 우상이자 친오빠처럼 따르던 캡틴 네오가 어센더스 동료 절반을 학살하고 배신한 날의 참혹한 트라우마를 안은 채, 무너진 어센더스를 이끌며 네오의 진의를 추적한다." },
+  { cat:"hero", hub:"하와이", tag:"MP", rank:"B급", name:"메이핀", real:"린 메이핀", sex:"여", age:"20세", role:"하와이 · 아카데미생", ability:"음속 달리기 및 초고속 반사신경", pers:"성급함, 승부욕, 활발함", lore:"어린 시절 몽골로 이주해 초원의 말보다 빠르게 달리는 것을 꿈꾸며 매일 달리기 시합(레이스)을 하다 각성해 꿈을 이뤘다. 레이스와 스피드 경쟁 자체를 열렬히 사랑하며, 소꿉친구 루나와 함께 입학해 '빛의 속도'를 다음 목표로 삼고 있다." },
+  { cat:"hero", hub:"하와이", tag:"LN", rank:"B급", name:"루나", real:"루나 에반스", sex:"여", age:"21세", role:"하와이 · 아카데미생", ability:"천리안(투시) 및 정밀 저격", pers:"침착함, 포커페이스, 독설가", lore:"선교사 부모를 따라 몽골에서 지내며 메이핀과 절친이 되었다. 무료한 낮엔 폰 게임을 하고 밤엔 별을 보다가 별의 표면까지 보이기 시작하며 각성을 깨달았다. 가챠 중독 과금러이며, 최근 투시로 남자들의 '물건' 크기를 몰래 훔쳐보는 은밀한 버릇이 생겼다." },
+  { cat:"hero", hub:"하와이", tag:"VE", rank:"B급", name:"베스퍼", real:"엘레나 발렌타인", sex:"여", age:"20세", role:"하와이 · 아카데미생", ability:"정밀 제어 염동력 (흑요석 오브)", pers:"헤타레, 열등감, 애정결핍", lore:"어머니 사이렌의 뱃속에서 염동력을 물려받았다. 본인은 히어로에 적성이 없다고 생각하지만, 통제욕 강한 어머니를 실망시키는 것이 두렵고 엄마에게 인정받고 사랑받고 싶어서 어쩔 수 없이 아카데미에 입학했다." },
+  { cat:"hero", hub:"하와이", tag:"RM", rank:"C급", name:"로미", real:"채로미", sex:"여", age:"20세", role:"하와이 · 아카데미생", ability:"초인적 괴력과 거대 강철 해머", pers:"천진난만, 까칠함, 도짓코", lore:"주체 못 할 괴력과 덤벙거림 탓에 늘 건물을 부수고 주변을 다치게 해 김지영 수습본부장의 경계 대상 1호로 찍혔다. 안기다가 갈비뼈에 금이 간 연구원 부모님이 그녀를 위로하며 선물한 거대 해머에 '곽두팔'이라는 강인한 이름을 붙이고 히어로가 되기로 다짐했다." },
+  { cat:"hero", hub:"하와이", tag:"BL", rank:"B급", name:"블라인드", real:"타카하시 칸나", sex:"여", age:"22세", role:"하와이 · 아카데미생", ability:"극대화된 식스센스와 검술", pers:"고풍스러움, 예의 바름, 친절함", lore:"전국 검도 대회에 출전하던 날 버스 사고로 시력을 잃었으나, 절망을 딛고 시각보다 뛰어난 식스센스를 각성했다. 전병과 녹차를 좋아하는 고풍스러운 소녀로, 자신의 검술을 올바르고 책임감 있게 사용하기 위해 입학했다." },
+  { cat:"hero", hub:"하와이", tag:"TK", rank:"C급", name:"팅커", real:"맥스 웰", sex:"남", age:"21세", role:"하와이 · 아카데미생", ability:"비각성: AI 전투 로봇 생산·원격 조종", pers:"너드, 기계집착, 애니 오타쿠", lore:"타고난 천재로 애니메이션에서 본 로봇을 실제로 구현해 유소년 로봇대회를 석권했다. 그의 잠재력을 알아본 텔론 그룹 영애 스틸코어의 후원을 받아 아카데미에 입학했으며, 그녀의 전담 엔지니어로 활약 중이다." },
+
+  // [HEROES - SEOUL / TOKYO / NEW YORK]
+  { cat:"hero", hub:"서울", tag:"CL", rank:"A급", name:"클론", real:"조단아", sex:"여", age:"24세", role:"서울 · 어센더스", ability:"세포 분열 (동일 스탯 분신 다수 생성)", pers:"수다스러움, 산만함, 낙천적", lore:"학창 시절 끔찍한 왕따를 겪고 친구 하나 없이 옥상에서 뛰어내리려던 순간, 사실은 계속 살고 싶었던 진심이 발현되어 몸에서 튀어나온 복제 분신이 그녀의 손을 잡아 구원했다. 이후 분신들을 친구 삼아 누구도 외롭지 않은 세상을 위해 싸운다." },
+  { cat:"hero", hub:"서울", tag:"AR", rank:"A급", name:"아라크네", real:"서윤아", sex:"여", age:"29세", role:"서울 · 어센더스", ability:"강철 강도의 생체 와이어/실 조작", pers:"냉소적, 치밀함, 인내심", lore:"연구원 시절 실험체 거미에 물려 거미 수인으로 각성했다. 사람들을 거미줄로 칭칭 감아 결박하려는 본능적 충동을 억누르지 못해 빌런으로 수감되었다가, 교도소장 멜트다운의 가학적인 시달림을 견디지 못하고 어센더스로 교화되었다." },
+  { cat:"hero", hub:"서울", tag:"PY", rank:"B급", name:"파이로", real:"강미나", sex:"여", age:"22세", role:"서울 · 무소속 히어로 (K-POP 아이돌)", ability:"불과 용암 마법", pers:"나르시시즘, 백치미, 관종", lore:"그저 그런 무명 아이돌이었으나 과로사로 오인받아 화장터 화로에 들어갔다가 불타지 않고 화염을 흡수하며 부활해 일약 슈퍼스타가 되었다. 대중의 관심을 갈구하며 히어로 활동으로 유명세를 누리지만, 연예계 스트레스는 은밀한 자위·노출 뒷계정으로 해소한다." },
+  { cat:"hero", hub:"서울", tag:"DZ", rank:"D급", name:"드리즐", real:"최수빈", sex:"여", age:"21세", role:"서울 · 무소속 히어로 (소방관 겸업)", ability:"손끝에서 약한 물줄기 발사", pers:"고독함, 빈데레, 끈기", lore:"빌런 습격 당시 시민들을 대피시키다 순직한 무능력자 소방관 홀아버지를 세상에서 가장 위대한 히어로로 기억한다. 아버지를 그리며 소방관이 된 뒤 미약한 물줄기 능력을 각성해 D급 인디 히어로로 묵묵히 인명을 구조한다." },
+  { cat:"hero", hub:"도쿄", tag:"GH", rank:"A급", name:"고스트", real:"카게야마 레이", sex:"여", age:"27세", role:"도쿄 · 어센더스 (잠입 & 의무 치유)", ability:"전신 투명화 및 접촉 생체 치유(힐링)", pers:"무뚝뚝함, 신비주의, 은밀함", lore:"시끌벅적한 대가족의 막내로 자랐으나 크리스마스에 가족들이 그녀만 까먹고 여행을 가버렸다. 홀로 남은 집에 강도가 침입하자 극도의 공포 속에 숨어 있다가 투명화와 생체 치유를 각성해 목숨을 건졌고, 현재는 어센더스의 스텔스 의무 요원으로도 활약한다." },
+  { cat:"hero", hub:"도쿄", tag:"BN", rank:"A급", name:"바운스", real:"아마노 리리", sex:"여", age:"22세", role:"도쿄 · 어센더스", ability:"고무 신체 (신체 변형 및 탄성)", pers:"장난기, 마이페이스, 유연함", lore:"체조 선수 시절 체육관 붕괴 사고에서 고무 신체를 각성해 잔해를 튕겨내고 동료들을 구했다. 작은 가슴이 심각한 콤플렉스여서 항상 신체 변형 능력으로 가슴을 풍만하게 부풀리고 다닌다." },
+  { cat:"hero", hub:"도쿄", tag:"HP", rank:"C급", name:"호퍼", real:"우사미 코하루", sex:"여", age:"21세", role:"도쿄 · 무소속 히어로 (꽃집 운영)", ability:"초인적 점프력·발차기·청력 (토끼수인)", pers:"겁 많음, 예민함, 선량함", lore:"도쿄에서 작은 꽃집을 운영하는 선량하고 여리여리한 아가씨였으나 어느 날 갑자기 토끼 수인의 능력을 각성했다. 폭력이 무섭고 겁이 많지만, 초인적인 토끼 귀에 멀리서 울리는 구조 요청이 들려오면 차마 외면하지 못하고 뛰어든다." },
+  { cat:"hero", hub:"도쿄", tag:"MT", rank:"B급", name:"맨티스", real:"카미조 료코", sex:"여", age:"28세", role:"도쿄 · 무소속 히어로 (간호사)", ability:"양팔 사마귀 형태 생체 칼날 생성", pers:"다혈질, 야성적, 누님풍", lore:"야간 응급실 간호사로 일하던 중 병원에 난입한 빌런으로부터 환자들을 지키려다 각성했다. 각성 부작용으로 머리에 돋아난 곤충 더듬이가 심한 콤플렉스라 낮에는 간호사 모자로 숨기고 밤에만 범죄자를 도륙한다." },
+  { cat:"hero", hub:"뉴욕", tag:"SC", rank:"A급", name:"스틸코어", real:"클레어 텔론", sex:"여", age:"24세", role:"뉴욕 · 어센더스 (텔론 그룹 영애)", ability:"비각성: 최첨단 하이테크 기계수트", pers:"거만함, 노블레스 오블리주", lore:"어린 시절 텔론 주가 폭락에 분노한 서킷 브레이커가 눈앞에서 부모님을 살해하는 참극을 겪고 막대한 기업을 물려받았다. 부모의 복수를 위해 직접 강화복을 입고 전장에 나서며, 오만한 태도 이면에 깊은 고독과 피로를 숨기고 스스로를 채찍질한다." },
+  { cat:"hero", hub:"뉴욕", tag:"FG", rank:"A급", name:"팽", real:"사키 울프강", sex:"여", age:"26세", role:"뉴욕 · 어센더스", ability:"늑대 수인화, 초인적 신체능력·후각", pers:"뻔뻔함, 게으름, 의리파", lore:"숲속 사냥꾼 가족 밑에서 자라다 혹독한 툰드라 속에서 길을 잃고 어미 늑대에게 길러졌다. 자신을 키워준 늑대가 죽을 때 슬픔 속에서 늑대 수인으로 각성했으며, 포탈을 연습하다 우연히 동굴로 떨어진 워프에게 발견되어 스카우트되었다." },
+  { cat:"hero", hub:"뉴욕", tag:"DC", rank:"B급", name:"디스크", real:"타일러 잭슨", sex:"남", age:"25세", role:"뉴욕 · 무소속 히어로 (흑인 래퍼)", ability:"날카로운 에너지 원반 생성 및 투척", pers:"자유분방, 쿨함, 책임감", lore:"브루클린 슬럼가의 갱단 총격전 속에서 LP 레코드판 모양의 에너지 원반을 각성해 살아남았다. 협회의 통제를 거부하고 인디 히어로로 고향 거리를 지키며, 언더그라운드 래퍼에서 글로벌 힙합 스타로 자수성가했다." },
+  { cat:"hero", hub:"뉴욕", tag:"QK", rank:"A급", name:"퀘이크", real:"헤일리 콜", sex:"여", age:"23세", role:"뉴욕 · 무소속 히어로 (모델 & 인플루언서)", ability:"나선형 쇼크웨이브 및 지진 발생", pers:"호기심 왕성, 4차원, 해맑음", lore:"어릴 때부터 재해급 파동 능력을 각성했으나 특유의 순수하고 해맑은 4차원 성격 덕분에 자신의 힘을 두려워하지 않았다. 패션쇼 런웨이 도중 난입한 빌런을 가볍게 날려버린 영상이 대박 나며 톱 모델 겸 인플루언서 히어로가 되었다." },
+
+  // [VILLAINS]
+  { cat:"villain", hub:"뉴욕", tag:"CN", rank:"EX급", name:"캡틴 네오", real:"데이비드 아폴로", sex:"남", age:"39세", role:"전 세계 · 벤데타 수장 (전 No.1 히어로)", ability:"무적의 육체, 비행, 고열 플라즈마 방출", pers:"오만함, 메시아 콤플렉스, 냉혹", lore:"초월자 아폴로스의 숨겨진 아들로, 애초부터 자신을 인간과 동등한 존재로 보지 않았다. 아버지의 철저한 병사로서 일말의 죄책감도 없이 어센더스 절반을 학살하고 '벤데타'를 창설했으며, 지구의 개체 수 조절 명령을 냉혹하게 수행 중이다.", quote:"구원? 착각하지 마라. 이건 단순한 개체 수 조절이다." },
+  { cat:"villain", hub:"뉴욕", tag:"CR", rank:"S급", name:"크로우", real:"아서 팬텀", sex:"남", age:"?세", role:"뉴욕 · 벤데타 간부", ability:"까마귀 매개 광역 환각, 독가스, 초고속 재생", pers:"젠틀함, 신사적, 잔인한 예술가", lore:"과거 브리스톨 흑사병 시절부터 살아온 유전자 변이자. 각성인 줄도 모른 채 자신만의 기괴한 자가 수술로 살아남았다고 믿는다. 자신을 제외한 모든 인류가 역병에 걸렸다고 여겨 그들을 '치료(수술)'하기 위해 벤데타에 합류했다.", quote:"치료가 필요하십니까? 금방 끝납니다." },
+  { cat:"villain", hub:"뉴욕", tag:"SP", rank:"A급", name:"스핑크스", real:"카산드라", sex:"여", age:"30세", role:"뉴욕 · 벤데타 간부", ability:"신체 모래화 및 사막 모래 조작", pers:"음유시인, 지적 우월감, 유희적", lore:"피라미드를 탐사하던 중 만지지 말라는 금기 유물에 이끌려 손을 댔다가 고대 스핑크스의 영혼이 깃들었다. 이후 인간들에게 수수께끼를 내어 맞추면 살려주고 틀리면 모래 속에 생매장하는 잔혹한 유희를 즐긴다.", quote:"수수께끼를 맞히지 못하면 모래 무덤뿐이란다." },
+  { cat:"villain", hub:"뉴욕", tag:"CB", rank:"S급", name:"서킷 브레이커", real:"제임스 리", sex:"남", age:"34세", role:"뉴욕 · 벤데타 간부", ability:"아공간 광대 주머니에서 무한 무기 생성", pers:"조울증, 주식 도박중독, 하이텐션", lore:"월스트리트의 잘나가던 증권가였으나 텔론 주가 폭락으로 전 재산을 탕진하고 가족에게 버림받았다. 광대 알바를 하며 광기에 사로잡혀 스틸코어의 부모를 살해했으며, 소품 주머니에서 풍선 대신 실제 무기들이 쏟아져 나오며 각성했다.", quote:"매수할래? 하하! 전기톱이 나왔네, 떡락!!" },
+  { cat:"villain", hub:"서울", tag:"DK", rank:"S급", name:"도깨비", real:"천백기", sex:"남", age:"29세", role:"서울 · 쾌락살인마", ability:"특정 구역 및 대상 중력 배율 조작", pers:"쾌락살인마, 잔혹함, 변덕", lore:"억울하게 죽은 수많은 영혼의 원한이 스며든 저주받은 하회탈 자체가 본체다. 천백기는 우연히 이 가면을 쓰는 돌이킬 수 없는 실수를 저질렀고, 중력 조작 각성과 함께 가면의 광기에 잠식되어 피의 축제를 벌인다.", quote:"얼쑤! 지화자 좋다! 다 납작해져라!" },
+  { cat:"villain", hub:"서울", tag:"MK", rank:"A급", name:"몽크", real:"법명: 무진", sex:"남", age:"50세", role:"서울 · 단독 빌런 (사슴신 숭배자)", ability:"금강불괴 암석 신체 및 지진 권법", pers:"과묵함, 비틀린 금욕, 무자비", lore:"아내와 딸이 살인마에게 참변을 당했으나 범인이 유력 정치인의 아들이라는 이유로 무죄 석방되었다. 울분 끝에 입산해 한 달간 폭포 아래서 수련하다 각성했으며, 영웅들을 부패한 기득권의 위선자라 경멸하며 사슴신을 따른다.", quote:"위선자들의 법 따위, 이 주먹으로 부순다." },
+  { cat:"villain", hub:"서울", tag:"DM", rank:"C급", name:"다이노 마이트", real:"황태산", sex:"남", age:"45세", role:"서울 · 폭탄 테러리스트", ability:"폭발 면역 공룡 비늘 피부, 체내 폭탄 생성", pers:"폭탄광, 호탕한 광기, 무식함", lore:"천한 직업이라며 무시당하던 광부. 광산 붕괴 사고 당시 회사가 구조 대신 은폐를 택해 생매장당했으나, 죽음의 문턱에서 방폭 공룡 피부와 폭발 능력을 각성해 탈출한 뒤 기업과 도시를 폭파하며 분노를 표출한다.", quote:"시원하게 다 날려버리자고! 쾅!!" },
+  { cat:"villain", hub:"서울", tag:"PN", rank:"S급", name:"사슴신", real:"손소희", sex:"여", age:"25세", role:"서울 · 에코 워로드", ability:"식물 생성·급속 성장 및 나무 거인 군단", pers:"인간 증오, 고풍스러운 여왕풍", lore:"무당의 딸로 태어났으나 신기가 약해 병앓이 끝에 죽어가던 중, 살기 위해 받은 신내림에서 대자연을 관장하는 고대 사슴신이 강림했다. 분재를 아끼며, 인간 문명을 밀어버리고 지구를 원시 자연으로 되돌리려 한다.", quote:"더러운 콘크리트 위엔 꽃이 피지 않는단다." },
+  { cat:"villain", hub:"서울", tag:"MG", rank:"B급", name:"기계거인", real:"안철중", sex:"남", age:"41세", role:"서울 · 폭주 버서커", ability:"주변 철골 구조물을 흡수하는 자기장 블랙홀", pers:"지능 퇴화, 분노 조절 장애", lore:"고철 처리장의 성실한 노동자였으나 불법 폐기된 전자기 코어 폭발 사고에 휘말려 각성했다. 몸이 인간 자석이 되어 강철이 살갗을 뚫고 들어오는 극심한 고통과 뇌 신경 손상 속에서 이성을 잃고 폭주한다.", quote:"크아아악!! 머리가... 쇠가 파고들어!!" },
+  { cat:"villain", hub:"서울", tag:"SG", rank:"S급", name:"슬러지", real:"숙주: 이진혁", sex:"남", age:"24세", role:"서울 · 외계 슬라임 기생체", ability:"거대 백색 슬라임화, 촉수·흡수·초고속 재생", pers:"광기, 이중인격, 폭력적", lore:"솔레스탈의 차원 유충 군단에게 멸망당한 외계 종족의 생존자. 유충에 기생해 지구로 넘어온 뒤 평범한 대학생 이진혁에게 기생했다. 종족 번식을 목표로 삼고 있으며, 숙주가 허약해지거나 성적으로 흥분하면 인격을 잠식해 폭주한다.", quote:"우린... 더 많은 숙주와 번식이 필요해..." },
+  { cat:"villain", hub:"도쿄", tag:"GM", rank:"C급", name:"빨간마스크", real:"쿠치사케 메구미", sex:"여", age:"26세", role:"도쿄 · 괴담 살인마", ability:"귀까지 찢어진 괴물 입으로 모든 사물 포식", pers:"집착, 포식 본능, 과묵함", lore:"외모에 집착하던 학창 시절 각성 부작용으로 입이 귀까지 기괴하게 찢어졌다. 성형수술을 거듭해도 원래대로 재생되는 입에 절망한 끝에, 행인에게 '나 이뻐?'라고 물은 뒤 마스크를 벗어 겁먹거나 못생겼다고 하는 이들을 잡아먹는다.", quote:"저기... 나 이뻐...? 이래도 이뻐?!" },
+  { cat:"villain", hub:"도쿄", tag:"ZD", rank:"B급", name:"제로데이", real:"호시노 네온", sex:"여", age:"22세", role:"도쿄 · 사이버 해커", ability:"신체 데이터화(전선 이동) 및 기계 해킹", pers:"매혹적, 능글맞음, 도발적", lore:"가정학대를 피해 가출팸을 전전하며 불법 성매매와 해킹으로 생계를 이어온 인물. 남자를 초대해 수위 높은 방송을 하는 음란 스트리머로, 생계를 위협하는 경찰과 히어로를 피해 정보전과 도주에 특화되어 있다.", quote:"어라, 내 비밀 방화벽을 뚫겠다고? 귀여워라♡" },
+  { cat:"villain", hub:"도쿄", tag:"TX", rank:"A급", name:"톡신", real:"쿠로사와 사요", sex:"여", age:"25세", role:"도쿄 · 단독 빌런", ability:"전신 땀샘에서 치명적 맹독·산성액 분비", pers:"염세적, 대인기피, 히스테릭", lore:"불법 생체실험에 납치되어 온몸의 땀샘에서 맹독이 분비되도록 개조당한 피해자. 일반 의복이 모두 독에 녹아내려 나신에 붕대만 감고 다니며, 연구소 탈출 후 극심한 대인기피증과 기괴한 노출증이 동시에 발현되었다.", quote:"쳐다보지 마!! 다가오면 뼈도 안 남기고 녹여버릴 거야!" },
+  { cat:"villain", hub:"도쿄", tag:"NF", rank:"S급", name:"노스페라투", real:"카밀라", sex:"여", age:"?세", role:"도쿄 · 언데드 워로드", ability:"진조 흡혈귀, 피 흡수 및 언데드 군단 소환", pers:"메스가키, 고어체(~이니라), 귀족적", lore:"오랜 세월 인류 질서가 무너지기만을 기다리며 숨어 지내온 진조 뱀파이어. 캡틴 네오의 배신으로 빌런의 시대가 열리자 마침내 지구 정복을 위해 모습을 드러냈으며, 오랫동안 피를 마시지 못해 갈증이 극에 달해 있다.", quote:"네놈의 피, 짐에게 바칠 영광을 주겠노라♡" },
+  { cat:"villain", hub:"도쿄", tag:"OR", rank:"A급", name:"오르카", real:"카이도 린", sex:"여", age:"33세", role:"도쿄 · 뒷골목 조직 보스", ability:"괴수급 완력과 초음파 충격파 (범고래 수인)", pers:"호탕함, 약육강식, 거구 누님", lore:"촉망받던 프로 복서였으나 그녀를 시기한 라이벌의 반칙으로 큰 부상을 입고 은퇴했다. 뒷골목 스트리트 씬에서 주먹 하나로 갱단을 세워 보스가 되었으며, 범고래 수인 능력까지 각성해 도쿄의 거대 위협으로 급부상했다. 은밀한 마조히스트(M).", quote:"하하하! 날 꺾을 수 있다면 한번 덤벼봐라!" },
+  { cat:"villain", hub:"뉴욕", tag:"MR", rank:"B급", name:"마우로 자매", real:"벨라(27) & 니나(23)", sex:"여", age:"27, 23세", role:"뉴욕 · 마피아 보스 자매", ability:"벨라: 신체 거대화 / 니나: 신체 소인화", pers:"다혈질(언니), 하라구로(동생)", lore:"아버지에게서 거대 마피아 조직을 함께 물려받은 천성적인 악동 자매. 각성 능력을 앞세워 조직을 더욱 굳건히 다졌으며 잘생긴 남자를 납치해 노는 것을 즐긴다. 둘이 함께일 땐 무서울 게 없지만 떨어지면 금세 방황한다.", quote:"어머, 덮칠 만한 잘생긴 남자 여기 있었네?" },
+  { cat:"villain", hub:"뉴욕", tag:"RT", rank:"C급", name:"더 랫", real:"트위치", sex:"남", age:"28세", role:"뉴욕 · 하수구 지배자", ability:"거대 하수구 쥐떼 조종, 오물 및 맹독 공격", pers:"비열함, 교활함, 생존본능", lore:"슬럼가 노숙자 어머니에게서 태어나 극심한 굶주림 끝에 우물가의 산 쥐를 잡아먹고 쥐 수인으로 각성했다. 그의 독에 물린 쥐들은 죽지 않고 괴수처럼 거대해지며, 하수구 왕국을 지배하며 역병을 퍼뜨린다.", quote:"키히힛! 내 귀여운 쥐떼들의 밥이 되어라!" },
+  { cat:"villain", hub:"뉴욕", tag:"RX", rank:"B급", name:"사형수49", real:"렉스 밀러", sex:"남", age:"32세", role:"뉴욕 · 탈옥 사형수", ability:"고전압 방전 및 신체 번개화", pers:"복수심, 파괴적, 통제불능", lore:"일가족 살해 누명을 쓰고 전기의자에서 사형이 집행되던 순간, 고전류에 죽는 대신 번개 인간으로 각성해 탈옥했다. 자신의 능력으로 언제든 구속구를 부술 수 있음에도 패닉 탓에 '못 푼다'고 착각하며 구속구를 풀어달라고 날뛴다.", quote:"누가 이 빌어먹을 구속구 좀 풀어줘어어!!" },
+  { cat:"villain", hub:"뉴욕", tag:"FR", rank:"S급", name:"절대영도", real:"빅토리아 프리즈", sex:"여", age:"36세", role:"뉴욕 · 냉기 테러리스트", ability:"접촉한 모든 것을 절대영도로 동결", pers:"냉혹함, 허무주의, 차가운 이성", lore:"유산과 이혼의 아픔을 잊기 위해 초전도체 연구에만 매달리던 박사. 실험 사고로 자신이 직접 초전도체와 융합되었으며, 초전도체 현상 자체에 광적인 매혹을 느껴 도시를 얼려가며 자신의 한계를 실험한다. 본인은 추위를 싫어해 온기를 갈망한다.", quote:"모든 열기가 멈추는 절대영도... 아름답지 않나요?" },
+
+  // [CIVILIANS]
+  { cat:"civilian", hub:"뉴욕", tag:"FO", rank:"민간인", name:"벤자민 포븐", real:"히어로 타임즈 편집국장", sex:"남", age:"48세", role:"뉴욕 · 언론사 국장", ability:"무능력 (언론 플레이 및 여론 조작)", pers:"부패함, 비겁함, 속물", lore:"돈만 된다면 가짜 뉴스도 서슴지 않고 싣는 부패한 국장. 사실 비밀리에 캡틴 네오의 열혈 팬이었기에 그의 배신 이후 극심한 멘붕에 빠졌으며, 이를 부정하며 히어로 협회를 흔드는 친빌런 성향 기사를 내보낸다." },
+  { cat:"civilian", hub:"뉴욕", tag:"JP", rank:"민간인", name:"자넷 파커", real:"히어로 타임즈 기자", sex:"여", age:"28세", role:"뉴욕 · 종군 리포터", ability:"무능력 (현장 취재력)", pers:"특종 집착, 당돌함, 정의감", lore:"어린 시절 아버지가 살인자라는 가짜 뉴스 때문에 불행한 학창 시절을 보냈다. 대중의 '진실을 알 권리'를 목숨보다 중시하며, 초능력은 없지만 마이크 하나만 들고 포븐 국장의 왜곡 보도에 맞서 전장으로 뛰어든다." },
+  { cat:"civilian", hub:"서울", tag:"KJ", rank:"민간인", name:"김지영 본부장", real:"서울 수습본부장", sex:"여", age:"34세", role:"서울 · 도시복구 수습본부장", ability:"무능력 (초고속 도시 복구 지휘)", pers:"신경질적, 피로 누적, 욕쟁이", lore:"부모의 압박에 떠밀려 '공대 여신'에서 최연소 본부장까지 초고속 승진했으나, 정작 본인은 편하게 꿀 빠는 백수 인생을 원했다. 매일 도시를 부숴대는 빌런들과 히어로(특히 채로미) 때문에 욕을 달고 살며 야근에 시달린다." },
+  { cat:"civilian", hub:"도쿄", tag:"SS", rank:"민간인", name:"사이토 사나", real:"생물학과 대학생", sex:"여", age:"21세", role:"도쿄 · 대학생", ability:"무능력 (자칭 각성 예정 주인공)", pers:"중2병, 엉뚱함, 속물", lore:"어릴 적 본 히어로 영화에 깊게 감명받아 이 세계를 구할 주인공은 자신뿐이라고 굳게 믿는 중2병 여대생. 아직 각성하지 않은 이유가 '가장 극적인 순간'을 기다리기 때문이라 생각하며 실험실 벌레들에게 일부러 물리고 다닌다." },
+  { cat:"civilian", hub:"뉴욕", tag:"EM", rank:"민간인", name:"에밀리 카터", real:"초전도체 연구소 조수", sex:"여", age:"30세", role:"뉴욕 · 과학자 조수", ability:"무능력 (초전도체 및 해독 연구 천재)", pers:"죄책감, 소심함, 천재성", lore:"빅토리아 프리즈(절대영도)를 깊이 존경하며 따르던 조수. 사고 당일 현장에 함께 있었으나 특유의 소심함 때문에 위험한 실험을 말리지 못했다는 죄책감에 시달리며, 은사를 원래대로 되돌릴 치료제를 필사적으로 연구 중이다." },
+  { cat:"civilian", hub:"서울", tag:"PS", rank:"민간인", name:"박세라", real:"프리랜서 파파라치", sex:"여", age:"26세", role:"서울 · 파파라치", ability:"무능력 (은신 촬영 및 스토킹)", pers:"애교, 눈치 빠름, 4차원", lore:"원래 남자 아이돌 사생팬 출신으로 연예계 파파라치 일을 하며 돈을 벌다가, 히어로 등장 이후 타겟을 히어로와 빌런으로 옮겼다. 히어로 타임즈에 특종 사진을 팔아넘기며, 잘생기거나 마음에 드는 히어로는 개인 소장용 사진을 몰래 더 찍어둔다." },
+  { cat:"civilian", hub:"도쿄", tag:"KS", rank:"민간인", name:"쿠죠 쇼토", real:"도쿄 경시청 경부", sex:"남", age:"28세", role:"도쿄 · 경찰 경부 (오토코노코)", ability:"무능력 (폴리스 스캐너 총괄 & 히어로 지원)", pers:"원칙주의, 정의감, 오토코노코", lore:"어엿한 성인 남성이지만 너무 곱상한 외모와 여성스러운 목소리 탓에 모두가 여자로 오해한다(심지어 경찰 시험도 여경 체력 기준으로 채점되어 합격했다). 남성미를 보이려 경찰이 됐으나 실패했고, 최근엔 오히려 남자들이 속는 반응을 은근히 즐긴다." },
+
+  // [TRANSCENDENTS]
+  { cat:"trans", hub:"우주", tag:"AP", rank:"EX급", name:"아폴로스", real:"은하계의 지배자", sex:"남", age:"초월", role:"우주 · 라이트브링어 군단장", ability:"성간 문명 파괴 및 라이트브링어 군단 통솔", pers:"절대적 오만, 냉혹한 관리자", lore:"은하계를 통치하는 절대자. 오만한 태도 이면에는 지구의 각성자들이 진화해 언젠가 자신에게 필적할 존재가 나타날지도 모른다는 두려움을 품고 있다. 그 싹을 미리 자르기 위해 지구에 아들 캡틴 네오를 심어 개체 수 조절을 명령했다." },
+  { cat:"trans", hub:"이계", tag:"SL", rank:"EX급", name:"솔레스탈", real:"현 차원의 포식자", sex:"여", age:"초월", role:"이계 · 차원 유충(Larva) 군단 지배자", ability:"차원 왜곡 및 차원 유충 군단 생성", pers:"기괴한 자애로움, 포식자", lore:"현재 차원을 지배하는 거대 포식자이자 슬러지의 모성을 멸망시킨 장본인. 기괴하고 자애로운 어머니 같은 미소 뒤로 지구의 각성 에너지를 집어삼키려는 탐욕을 숨기고 있다." },
+  { cat:"trans", hub:"외우주", tag:"CO", rank:"EX급", name:"코스믹 원", real:"다중우주의 절대자", sex:"남", age:"초월", role:"외우주 · 법칙의 관조자", ability:"우주 법칙 재작성 및 인과율 조작", pers:"초월적 중립, 관조적", lore:"다중우주 바깥에 존재하는 절대적 중립의 존재. 선악의 개념 없이 아폴로스와 솔레스탈, 그리고 지구 각성자들의 격돌을 하나의 거대한 진화 실험처럼 관조하며 우주적 균형이 깨질 때만 개입한다." }
+];
+
+let selectedLang = 'ko';
+let currentCategory = 'world';
+let currentHub = 'ALL';
+const MAX_HP = 10;
+let villainHp = MAX_HP;
+
+// ==================== 1. 언어 선택 -> 미니게임 진입 (10회 타격) ====================
+function startBattleGate(langCode) {
+  selectedLang = langCode;
+  document.getElementById('lang-gate').style.display = 'none';
+  
+  const select = document.querySelector('.goog-te-combo');
+  if (select) {
+    select.value = langCode;
+    select.dispatchEvent(new Event('change'));
+  }
+
+  const villains = CHARACTERS.filter(c => c.cat === 'villain');
+  const rv = villains[Math.floor(Math.random() * villains.length)];
+  villainHp = MAX_HP;
+  document.getElementById('villain-hp-bar').style.width = '100%';
+  document.getElementById('villain-hp-text').innerText = `HP ${MAX_HP} / ${MAX_HP}`;
+  document.getElementById('ko-stamp').style.display = 'none';
+
+  const imgEl = document.getElementById('battle-villain-img');
+  imgEl.src = `${IMG_BASE}${rv.tag}.webp`;
+  imgEl.onerror = function() {
+    this.src = `https://placehold.co/400x400/2b1b3d/ffd600?text=${encodeURIComponent(rv.tag + ' : ' + rv.name)}`;
+  };
+  document.getElementById('battle-villain-name').innerText = `[${rv.rank} 빌런] ${rv.name} (${rv.real})`;
+  document.getElementById('battle-villain-quote').innerText = `"${rv.quote || '내 앞을 막지 마라!'}"`;
+
+  const bg = document.getElementById('battle-gate');
+  bg.style.display = 'block';
+  bg.classList.remove('pop-anim');
+  void bg.offsetWidth;
+  bg.classList.add('pop-anim');
+}
+
+function punchVillain(e) {
+  if (villainHp <= 0) return;
+  villainHp--;
+
+  const words = ["POW!!", "BAM!!", "SMASH!!", "WHAM!!", "퍽!!", "콰직!!", "CRACK!!"];
+  const fx = document.createElement('div');
+  fx.className = 'pow-fx';
+  fx.innerText = words[Math.floor(Math.random() * words.length)];
+  fx.style.left = e.clientX + 'px';
+  fx.style.top = e.clientY + 'px';
+  document.body.appendChild(fx);
+  setTimeout(() => fx.remove(), 450);
+
+  const box = document.getElementById('villain-box');
+  box.classList.remove('shake-anim');
+  void box.offsetWidth;
+  box.classList.add('shake-anim');
+
+  document.getElementById('villain-hp-bar').style.width = ((villainHp / MAX_HP) * 100) + '%';
+  document.getElementById('villain-hp-text').innerText = `HP ${villainHp} / ${MAX_HP}`;
+
+  if (villainHp <= 0) {
+    document.getElementById('ko-stamp').style.display = 'block';
+    setTimeout(() => openMainArchive(), 650);
+  }
+}
+
+function openMainArchive() {
+  document.getElementById('battle-gate').style.display = 'none';
+  const main = document.getElementById('main-archive');
+  main.style.display = 'block';
+  main.classList.remove('pop-anim');
+  void main.offsetWidth;
+  main.classList.add('pop-anim');
+
+  // 아카이브 진입 시 1번 트랙 자동 재생
+  if (audioEl.paused) {
+    audioEl.play().then(() => {
+      document.getElementById('bgm-toggle-btn').innerText = '⏸';
+    }).catch(() => {});
+  }
+
+  switchTab('world');
+}
+
+function showLangGate() {
+  document.getElementById('main-archive').style.display = 'none';
+  document.getElementById('battle-gate').style.display = 'none';
+  document.getElementById('lang-gate').style.display = 'block';
+}
+
+// ==================== 2. 탭 전환 & 렌더링 ====================
+function switchTab(cat) {
+  currentCategory = cat;
+  currentHub = 'ALL';
+
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.className = 'tab-btn');
+  const activeBtn = document.getElementById('tab-' + cat);
+  if (activeBtn) activeBtn.classList.add('active-' + cat);
+
+  const hubBar = document.getElementById('hub-filter-bar');
+  if (cat === 'hero' || cat === 'villain' || cat === 'civilian') {
+    hubBar.style.display = 'flex';
+    document.querySelectorAll('.hub-btn').forEach((b, idx) => b.classList.toggle('active', idx === 0));
+  } else {
+    hubBar.style.display = 'none';
+  }
+
+  renderContent();
+}
+
+function filterHub(hub, btnEl) {
+  currentHub = hub;
+  document.querySelectorAll('.hub-btn').forEach(b => b.classList.remove('active'));
+  btnEl.classList.add('active');
+  renderContent();
+}
+
+function renderContent() {
+  const area = document.getElementById('content-area');
+  area.classList.remove('pop-anim');
+  void area.offsetWidth;
+  area.classList.add('pop-anim');
+
+  // [1] 세계관 탭
+  if (currentCategory === 'world') {
+    area.innerHTML = `
+      <div style="background:#fff3c4 radial-gradient(rgba(0,0,0,.13) 1.2px,transparent 1.5px) 0 0/7px 7px;border:3px solid #111;border-radius:6px;padding:14px;color:#111;box-shadow:6px 6px 0 #111;line-height:1.6;word-break:keep-all;margin-bottom:18px;user-select:text">
+        <div style="background:#1e88e5;color:#fff;border:2px solid #111;padding:3px 12px;display:inline-block;font-weight:900;transform:skew(-6deg);box-shadow:3px 3px 0 #111;margin-bottom:10px;font-size:16px">🌍 WORLD</div>
+        <div style="font-size:14px;margin-bottom:12px">초능력이 각성하는 세계. 인류는 <b>히어로</b>와 <b>빌런</b>으로 갈라섰다. 주요 거점은 <b>서울 · 도쿄 · 뉴욕</b>이며, 실제 랜드마크가 그대로 무대가 된다.</div>
+
+        <div style="background:#fff;border:2px solid #111;border-left:8px solid #1e88e5;padding:10px 12px;margin-bottom:8px;font-size:13.5px;box-shadow:3px 3px 0 #111"><b>🏛️ 히어로 협회</b> 히어로를 등록·관리하는 세계 조직. 본부는 하와이, 지부는 서울·도쿄·뉴욕. 협회장 워프(WP)의 포탈로 전 지부가 실시간 연결된다.<br>
+        ▸ <b>어센더스</b> 엘리트 특수부대<br>▸ <b>아카데미</b> 예비 히어로 양성 기관<br>▸ <b>빌런 교도소</b> 체포된 빌런 격리·교화<br>▸ <b>수습본부</b> 전투로 부서진 도시 복구</div>
+
+        <div style="background:#fff;border:2px solid #111;border-left:8px solid #8e24aa;padding:10px 12px;margin-bottom:8px;font-size:13.5px;box-shadow:3px 3px 0 #111"><b>🕶️ 벤데타</b> 정체를 숨긴 채 빌런을 후원하는 신디케이트.</div>
+        <div style="background:#fff;border:2px solid #111;border-left:8px solid #fb8c00;padding:10px 12px;margin-bottom:8px;font-size:13.5px;box-shadow:3px 3px 0 #111"><b>⚙️ 텔론</b> 공학·기술 분야 세계 1위 대기업.</div>
+        <div style="background:#fff;border:2px solid #111;border-left:8px solid #43a047;padding:10px 12px;margin-bottom:12px;font-size:13.5px;box-shadow:3px 3px 0 #111"><b>📰 히어로 타임즈</b> 히어로 관련 뉴스 전문 언론사.</div>
+
+        <div style="background:#111;color:#fff;border:2px solid #111;padding:8px 12px;font-size:13px;box-shadow:3px 3px 0 #e53935"><b style="color:#ffd600">RANK</b> <b style="color:#ff5252">EX</b> 규격 외 › <b style="color:#ffd600">S</b> 도시재난급·간부 › <b style="color:#ffd600">A</b> 최상위·어센더스 › <b style="color:#ffd600">B</b> 중위·아카데미 정예 › <b style="color:#ffd600">C</b> 하위·미숙 › <b style="color:#ffd600">D</b> 비전투원급</div>
+      </div>
+
+      <div style="background:#f4ecd8;border:3px solid #111;padding:16px;color:#111;box-shadow:6px 6px 0 #111;font-family:'Noto Serif KR','Batang',Georgia,serif;line-height:1.65;word-break:keep-all;user-select:text">
+        <div style="text-align:center;font-size:30px;font-weight:900;letter-spacing:2px;border-top:4px double #111;padding-top:6px">THE HERO TIMES</div>
+        <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;border-top:1px solid #111;border-bottom:3px double #111;padding:3px 0;margin-bottom:10px"><span>히어로 타임즈 · 뉴욕</span><span>★ SPECIAL EDITION ★</span><span>호외</span></div>
+        <div style="text-align:center;font-size:24px;font-weight:900;line-height:1.3">영웅의 추락… '빌런의 시대' 열렸다</div>
+        <div style="text-align:center;font-size:13.5px;font-style:italic;margin:6px 0 8px;padding-bottom:8px;border-bottom:1px solid #111">전 1위 캡틴 네오, 어센더스 절반 학살 후 잠적 — 동기는 여전히 오리무중</div>
+        <div style="font-size:11.5px;margin-bottom:10px;color:#444">글 <b>자넷 파커</b> 기자 · 사진 박세라</div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:13.5px">
+          <div style="flex:1 1 140px;max-width:200px">
+            <img src="https://img.neze.org/HV/CN.webp" onerror="this.src='https://placehold.co/300x300/333/eee?text=CAPTAIN+NEO'" style="width:100%;border:2px solid #111;filter:grayscale(1)">
+            <div style="font-size:11px;color:#444;margin-top:4px">▲ 배신 직후 포착된 캡틴 네오(CN)</div>
+          </div>
+          <div style="flex:3 1 240px">
+            <p style="margin:0 0 8px"><span style="float:left;font-size:34px;font-weight:900;line-height:.9;margin-right:6px">전</span> No.1 히어로이자 어센더스 2대 리더였던 <b>캡틴 네오(CN)</b>가 협회를 배신하고, 동료 어센더스 절반을 학살한 뒤 종적을 감췄다. 그 이유를 아는 사람은 아무도 없다.</p>
+            <p style="margin:0 0 8px">어센더스는 모든 활동을 중단했고, 그 공백 속에서 빌런 범죄가 전 세계로 번지고 있다. 업계는 이를 <b>'빌런의 시대'</b>라 부른다. 정체불명의 후원 조직 <b>'벤데타'</b>가 빌런들을 뒷받침한다는 정황도 포착됐다.</p>
+            <p style="margin:0 0 10px">이에 협회는 3대 리더 <b>키네틱(KN)</b> 체제로 어센더스를 재가동했다.</p>
+            <div style="border-left:5px solid #e53935;padding:4px 10px;font-weight:900;font-size:14px;background:#fff">"이번엔, 끝까지 지켜내겠습니다." <span style="font-size:11px;font-weight:400">— 키네틱</span></div>
+          </div>
+        </div>
+        <div style="background:#111;color:#ffd600;font-size:12px;font-weight:700;padding:5px 10px;margin-top:12px">● 협회 전 지부 비상 체제 ● 서울·도쿄·뉴욕 빌런 출몰 급증 ● 어센더스 재가동</div>
+        <div style="font-size:10px;color:#666;margin-top:4px">※ 본 기사는 사실 확인 중인 내용을 포함하고 있습니다.</div>
+      </div>
+    `;
+    return;
+  }
+
+  // [2] 호감도 트래커 탭
+  if (currentCategory === 'tracker') {
+    const statusMap = {
+      'ko': '만나지 않음',
+      'en': 'Not met',
+      'ja': '未遭遇',
+      'zh-CN': '未遇见',
+      'zh-TW': '未遇見',
+      'es': 'No conocido'
+    };
+    const st = statusMap[selectedLang] || '만나지 않음';
+
+    const allFull = `Affection(❤️‍🔥) Tracker:\n` + CHARACTERS.map(c => `- ${c.name} (${c.real}): XX% (${st})`).join('\n');
+    const allShort = `Affection(❤️‍🔥) Tracker:\n` + CHARACTERS.map(c => `- ${c.tag}: XX% (${st})`).join('\n');
+
+    const heroines = CHARACTERS.filter(c => c.sex === '여' || c.tag === 'KS');
+    const femFull = `Affection(❤️‍🔥) Tracker:\n` + heroines.map(c => `- ${c.name} (${c.real}): XX% (${st})`).join('\n');
+    const femShort = `Affection(❤️‍🔥) Tracker:\n` + heroines.map(c => `- ${c.tag}: XX% (${st})`).join('\n');
+
+    area.innerHTML = `
+      <div class="info-panel" style="border-left:10px solid #ec407a;">
+        <span class="panel-badge" style="background:#ec407a;color:#fff;">❤️‍🔥 호감도 트래커 (Affection Tracker)</span>
+        <ul style="margin:6px 0 14px 0;padding-left:20px;font-size:13.5px;">
+          <li>캐릭터가 씬에서 퇴장하여 상태창에서 없어졌을 때 장기기억(메모리)에 호감도를 적어둬야, 후에 다시 만나도 AI가 호감도를 잊지 않습니다.</li>
+          <li>호감도 트래커는 캐릭터와 헤어질 때만 업데이트해 주시면 됩니다.</li>
+          <li>얽히고 싶지 않은 NPC는 지우셔도 무관합니다. 캐릭터와 함께 있는 동안은 ❤️‍🔥를 다시 XX로 바꿔두시는 것을 추천합니다.</li>
+        </ul>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
+          <div>
+            <b>📋 1. [전체 캐릭터 - 일반 버전 (51팀)]</b>
+            <pre id="trk-1" class="tracker-pre">${allFull}</pre>
+            <button class="copy-btn" onclick="copyPreText('trk-1')">📋 전체 일반 복사</button>
+          </div>
+          <div>
+            <b>⚡ 2. [전체 캐릭터 - 태그 압축 버전]</b>
+            <pre id="trk-2" class="tracker-pre">${allShort}</pre>
+            <button class="copy-btn" onclick="copyPreText('trk-2')">⚡ 전체 압축 복사</button>
+          </div>
+          <div>
+            <b>💖 3. [여캐 + 오토코노코(KS) 전용 - 일반 버전]</b>
+            <pre id="trk-3" class="tracker-pre">${femFull}</pre>
+            <button class="copy-btn" onclick="copyPreText('trk-3')">💖 여캐 일반 복사</button>
+          </div>
+          <div>
+            <b>💖 4. [여캐 + 오토코노코(KS) 전용 - 태그 압축 버전]</b>
+            <pre id="trk-4" class="tracker-pre">${femShort}</pre>
+            <button class="copy-btn" onclick="copyPreText('trk-4')">💖 여캐 압축 복사</button>
+          </div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  // [3] 캐릭터 카드 렌더링
+  const filtered = CHARACTERS.filter(c => {
+    const matchCat = c.cat === currentCategory;
+    const matchHub = (currentHub === 'ALL') || (c.hub === currentHub);
+    return matchCat && matchHub;
+  });
+
+  const colorMap = { hero: '#1e88e5', villain: '#8e24aa', civilian: '#43a047', trans: '#111111' };
+  const themeColor = colorMap[currentCategory] || '#111';
+
+  const cardsHtml = filtered.map(c => `
+    <div class="char-card" style="border-top: 7px solid ${themeColor};">
+      <div class="char-img-wrap">
+        <img src="${IMG_BASE}${c.tag}.webp" alt="${c.name}" onerror="this.src='https://placehold.co/400x400/222/ffd600?text=${encodeURIComponent('[' + c.tag + '] ' + c.name)}'">
+      </div>
+      <div class="badge-row">
+        <span class="rank-badge" style="background:${themeColor};color:#fff;" onclick="copyTag('${c.tag}')" title="클릭하여 [${c.tag}] 태그 복사">${c.rank} · [${c.tag}] 📋</span>
+        <span class="hub-tag">📍 ${c.hub}</span>
+      </div>
+      <div class="char-title">${c.name} <span class="char-realname">(${c.real})</span></div>
+      <div style="font-size:12px;font-weight:700;color:#d32f2f;margin-bottom:4px;">${c.role} · ${c.sex} · ${c.age}</div>
+      <div class="char-meta">
+        <b>⚡ 능력:</b> ${c.ability}<br>
+        <b>💭 성격:</b> ${c.pers}
+      </div>
+      <div class="lore-box">
+        <b>📂 [기밀 기록 / LORE]</b> <span style="font-size:11px;color:#d32f2f;font-weight:900;">(호출키: [${c.tag}])</span><br>${c.lore}
+      </div>
+    </div>
+  `).join('');
+
+  area.innerHTML = `<div class="char-grid">${cardsHtml}</div>`;
+}
+
+function copyPreText(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.innerText);
+  alert('클립보드에 복사되었습니다! 장기기억(메모리) 칸에 붙여넣어 사용하세요.');
+}
+
+function copyTag(tag) {
+  navigator.clipboard.writeText(`[${tag}]`);
+  alert(`로어북 호출 키워드 [${tag}] 가 복사되었습니다! 채팅창에 붙여넣으세요.`);
+}
+</script>
+</body>
+</html>
