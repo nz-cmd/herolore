@@ -843,19 +843,19 @@ function renderContent() {
   // [1] 세계관 탭
   if (currentCategory === 'world') {
     area.innerHTML = `
-      <div style="background:#fff3c4 radial-gradient(rgba(0,0,0,.13) 1.2px,transparent 1.5px) 0 0/7px 7px;border:3px solid #111;border-radius:6px;padding:14px;color:#111;box-shadow:6px 6px 0 #111;line-height:1.6;word-break:keep-all;margin-bottom:18px;user-select:text">
-        <div style="background:#1e88e5;color:#fff;border:2px solid #111;padding:3px 12px;display:inline-block;font-weight:900;transform:skew(-6deg);box-shadow:3px 3px 0 #111;margin-bottom:10px;font-size:16px">🌍 WORLD</div>
-        <div style="font-size:14px;margin-bottom:12px">초능력이 각성하는 세계. 인류는 <b>히어로</b>와 <b>빌런</b>으로 갈라섰다. 주요 거점은 <b>서울 · 도쿄 · 뉴욕</b>이며, 실제 랜드마크가 그대로 무대가 된다.</div>
+<div style="background:#fff3c4 radial-gradient(rgba(0,0,0,.13) 1.2px,transparent 1.5px) 0 0/7px 7px;border:3px solid #111;border-radius:6px;padding:10px;color:#111;box-shadow:6px 6px 0 #111;font-family:'Noto Sans KR','Malgun Gothic',sans-serif;line-height:1.5;word-break:keep-all;margin-bottom:16px">
+<div style="background:#1e88e5;color:#fff;border:2px solid #111;padding:2px 10px;display:inline-block;font-weight:900;transform:skew(-6deg);box-shadow:3px 3px 0 #111;margin-bottom:8px">🌍 WORLD</div>
+<div style="font-size:12.5px;margin-bottom:8px">초능력이 각성하는 세계. 인류는 <b>히어로</b>와 <b>빌런</b>으로 갈라섰다. 주요 거점은 <b>서울 · 도쿄 · 뉴욕</b>이며, 실제 랜드마크가 그대로 무대가 된다.</div>
 
-        <div style="background:#fff;border:2px solid #111;border-left:8px solid #1e88e5;padding:10px 12px;margin-bottom:8px;font-size:13.5px;box-shadow:3px 3px 0 #111"><b>🏛️ 히어로 협회</b> 히어로를 등록·관리하는 세계 조직. 본부는 하와이, 지부는 서울·도쿄·뉴욕. 협회장 워프(WP)의 포탈로 전 지부가 실시간 연결된다.<br>
-        ▸ <b>어센더스</b> 엘리트 특수부대<br>▸ <b>아카데미</b> 예비 히어로 양성 기관<br>▸ <b>빌런 교도소</b> 체포된 빌런 격리·교화<br>▸ <b>수습본부</b> 전투로 부서진 도시 복구</div>
+<div style="background:#fff;border:2px solid #111;border-left:8px solid #1e88e5;padding:6px 8px;margin-bottom:6px;font-size:12px;box-shadow:3px 3px 0 #111"><b>🏛️ 히어로 협회</b> 히어로를 등록·관리하는 세계 조직. 본부는 하와이, 지부는 서울·도쿄·뉴욕. 협회장 워프의 포탈로 전 지부가 실시간 연결된다.<br>
+▸ <b>어센더스</b> 엘리트 특수부대 (📍<b>구 본부 폐허</b>: 학살 현장)<br>▸ <b>아카데미</b> 예비 히어로 양성 기관 (📍<b>훈련 돔</b>: 가상 전장)<br>▸ <b>빌런 교도소</b> 빌런 격리·교화 (📍<b>심해 감옥</b>: 능력 억제 요새)<br>▸ <b>수습본부</b> 전투로 부서진 도시 복구</div>
 
-        <div style="background:#fff;border:2px solid #111;border-left:8px solid #8e24aa;padding:10px 12px;margin-bottom:8px;font-size:13.5px;box-shadow:3px 3px 0 #111"><b>🕶️ 벤데타</b> 정체를 숨긴 채 빌런을 후원하는 신디케이트.</div>
-        <div style="background:#fff;border:2px solid #111;border-left:8px solid #fb8c00;padding:10px 12px;margin-bottom:8px;font-size:13.5px;box-shadow:3px 3px 0 #111"><b>⚙️ 텔론</b> 공학·기술 분야 세계 1위 대기업.</div>
-        <div style="background:#fff;border:2px solid #111;border-left:8px solid #43a047;padding:10px 12px;margin-bottom:12px;font-size:13.5px;box-shadow:3px 3px 0 #111"><b>📰 히어로 타임즈</b> 히어로 관련 뉴스 전문 언론사.</div>
+<div style="background:#fff;border:2px solid #111;border-left:8px solid #8e24aa;padding:6px 8px;margin-bottom:6px;font-size:12px;box-shadow:3px 3px 0 #111"><b>🕶️ 벤데타</b> 빌런을 후원하는 신디케이트. (📍<b>뉴욕 지하 아지트</b>: 초인 암시장·무법지대)</div>
+<div style="background:#fff;border:2px solid #111;border-left:8px solid #fb8c00;padding:6px 8px;margin-bottom:6px;font-size:12px;box-shadow:3px 3px 0 #111"><b>⚙️ 텔론</b> 공학·기술 세계 1위 대기업. (📍<b>텔론 타워</b>: 뉴욕 본사·강화복 격납고)</div>
+<div style="background:#fff;border:2px solid #111;border-left:8px solid #43a047;padding:6px 8px;margin-bottom:8px;font-size:12px;box-shadow:3px 3px 0 #111"><b>📰 히어로 타임즈</b> 히어로 관련 뉴스 전문 언론사.</div>
 
-        <div style="background:#111;color:#fff;border:2px solid #111;padding:8px 12px;font-size:13px;box-shadow:3px 3px 0 #e53935"><b style="color:#ffd600">RANK</b> <b style="color:#ff5252">EX</b> 규격 외 › <b style="color:#ffd600">S</b> 도시재난급·간부 › <b style="color:#ffd600">A</b> 최상위·어센더스 › <b style="color:#ffd600">B</b> 중위·아카데미 정예 › <b style="color:#ffd600">C</b> 하위·미숙 › <b style="color:#ffd600">D</b> 비전투원급</div>
-      </div>
+<div style="background:#111;color:#fff;border:2px solid #111;padding:5px 8px;font-size:11px;box-shadow:3px 3px 0 #e53935"><b style="color:#ffd600">RANK</b> <b style="color:#ff5252">EX</b> 규격 외 › <b style="color:#ffd600">S</b> 도시재난급·간부 › <b style="color:#ffd600">A</b> 최상위·어센더스 › <b style="color:#ffd600">B</b> 중위·아카데미 정예 › <b style="color:#ffd600">C</b> 하위·미숙 › <b style="color:#ffd600">D</b> 비전투원급</div>
+</div>
 
       <div style="background:#f4ecd8;border:3px solid #111;padding:16px;color:#111;box-shadow:6px 6px 0 #111;font-family:'Noto Serif KR','Batang',Georgia,serif;line-height:1.65;word-break:keep-all;user-select:text">
         <div style="text-align:center;font-size:30px;font-weight:900;letter-spacing:2px;border-top:4px double #111;padding-top:6px">THE HERO TIMES</div>
