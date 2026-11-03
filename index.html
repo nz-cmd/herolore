@@ -992,11 +992,11 @@ function punchVillain(e) {
 
 function showBattleRankResult(sec) {
   let rank = "D급", color = "#757575", desc = "비전투원/민간인 수준입니다! 김지영 수습본부장 밑에서 서류 작업이나 하셔야겠군요.";
-  if (sec <= 1.20) { rank = "EX급 (규격 외)"; color = "#ff1744"; desc = "⚡ 빛의 속도! 캡틴 네오의 모가지를 단숨에 비틀어버릴 신(God)급 광클입니다!"; }
-  else if (sec <= 1.60) { rank = "S급 (도시재난급)"; color = "#d500f9"; desc = "🔥 압도적인 타격 속도! 어센더스 차기 리더로 즉시 스카우트되었습니다!"; }
-  else if (sec <= 2.20) { rank = "A급 (어센더스 정예)"; color = "#1e88e5"; desc = "🛡️ 훌륭한 반사신경입니다! 최정예 특수부대 어센더스의 주력 요원급이군요."; }
-  else if (sec <= 3.00) { rank = "B급 (아카데미 우등생)"; color = "#43a047"; desc = "✨ 준수한 실력입니다! 메이핀, 루나와 함께 현장 실습을 나가도 되겠네요."; }
-  else if (sec <= 4.00) { rank = "C급 (신입 히어로)"; color = "#fb8c00"; desc = "💦 아슬아슬하게 격파! 동네 순찰부터 차근차근 경력을 쌓아봅시다."; }
+  if (sec <= 0.80) { rank = "EX급 (규격 외)"; color = "#ff1744"; desc = "⚡ 빛의 속도! 캡틴 네오의 모가지를 단숨에 비틀어버릴 신(God)급 광클입니다!"; }
+  else if (sec <= 1.00) { rank = "S급 (도시재난급)"; color = "#d500f9"; desc = "🔥 압도적인 타격 속도! 어센더스 차기 리더로 즉시 스카우트되었습니다!"; }
+  else if (sec <= 1.30) { rank = "A급 (어센더스 정예)"; color = "#1e88e5"; desc = "🛡️ 훌륭한 반사신경입니다! 최정예 특수부대 어센더스의 주력 요원급이군요."; }
+  else if (sec <= 1.60) { rank = "B급 (아카데미 우등생)"; color = "#43a047"; desc = "✨ 준수한 실력입니다! 메이핀, 루나와 함께 현장 실습을 나가도 되겠네요."; }
+  else if (sec <= 2.00) { rank = "C급 (신입 히어로)"; color = "#fb8c00"; desc = "💦 아슬아슬하게 격파! 동네 순찰부터 차근차근 경력을 쌓아봅시다."; }
 
   document.getElementById('res-time').innerText = sec.toFixed(2);
   const badge = document.getElementById('res-rank-badge');
