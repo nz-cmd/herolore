@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>ERA OF VILLAINS - Official Archive</title>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+KR:wght@500;700;900&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
 <style>
@@ -16,8 +16,10 @@
     --ink: #111111;
   }
   * { box-sizing: border-box; user-select: none; }
-  body {
+  html, body {
     margin: 0; padding: 0;
+    width: 100%; max-width: 100%;
+    overflow-x: hidden;
     background-color: #151515;
     background-image: 
       radial-gradient(rgba(255, 214, 0, 0.12) 2px, transparent 2px),
@@ -25,7 +27,6 @@
     background-size: 16px 16px, 100% 100%;
     font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
     color: var(--ink);
-    overflow-x: hidden;
   }
 
   /* 구글 번역 상단 배너 숨김 */
@@ -33,7 +34,7 @@
   body { top: 0px !important; }
   #google_translate_element { display: none; }
 
-  /* 메인 코믹북 래퍼 */
+  /* 메인 코믹북 래퍼 (모바일 가로 들썩임 방지를 위해 overflow: hidden 적용) */
   .comic-wrapper {
     max-width: 1180px;
     margin: 20px auto 130px auto;
@@ -46,27 +47,27 @@
     padding: 18px 18px 45px 18px;
     min-height: 85vh;
     position: relative;
+    overflow: hidden;
   }
 
-  /* 애니메이션 */
+  /* 애니메이션 (모바일 가로 넘침 없는 안전한 팝업 효과) */
   @keyframes comicPop {
-    0% { transform: scale(0.85) rotate(-2deg); opacity: 0; }
-    60% { transform: scale(1.03) rotate(0.5deg); opacity: 1; }
-    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    0% { transform: translateY(8px) scale(0.98); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
   }
   @keyframes hitShake {
     0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    20% { transform: translate(-12px, -8px) rotate(-4deg); }
-    40% { transform: translate(12px, 6px) rotate(4deg); }
-    60% { transform: translate(-8px, 8px) rotate(-2deg); }
-    80% { transform: translate(8px, -6px) rotate(2deg); }
+    20% { transform: translate(-10px, -6px) rotate(-3deg); }
+    40% { transform: translate(10px, 5px) rotate(3deg); }
+    60% { transform: translate(-6px, 6px) rotate(-2deg); }
+    80% { transform: translate(6px, -5px) rotate(2deg); }
   }
   @keyframes powBurst {
     0% { transform: translate(-50%, -50%) scale(0.2) rotate(-15deg); opacity: 1; }
-    60% { transform: translate(-50%, -50%) scale(1.3) rotate(8deg); opacity: 1; }
-    100% { transform: translate(-50%, -50%) scale(1.5) rotate(0deg); opacity: 0; }
+    60% { transform: translate(-50%, -50%) scale(1.25) rotate(8deg); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1.4) rotate(0deg); opacity: 0; }
   }
-  .pop-anim { animation: comicPop 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards; }
+  .pop-anim { animation: comicPop 0.28s ease-out forwards; }
   .shake-anim { animation: hitShake 0.22s ease; }
 
   /* 1단계: 언어 선택 게이트 */
@@ -75,28 +76,28 @@
     display: inline-block; background: var(--comic-red); color: #fff;
     border: 4px solid var(--ink); padding: 15px 35px;
     font-family: 'Bangers', 'Noto Sans KR', cursive;
-    font-size: clamp(30px, 6vw, 56px); letter-spacing: 2px;
+    font-size: clamp(28px, 6vw, 56px); letter-spacing: 2px;
     text-shadow: 4px 4px 0 var(--ink); box-shadow: 8px 8px 0 var(--ink);
-    transform: skew(-5deg); margin-bottom: 15px;
+    transform: skew(-5deg); margin-bottom: 15px; max-width: 100%;
   }
   .gate-sub {
-    display: block; font-weight: 900; font-size: 15px;
+    display: block; font-weight: 900; font-size: 14px;
     background: var(--comic-gold); border: 3px solid var(--ink);
-    padding: 6px 18px; width: fit-content; margin: 0 auto 30px auto;
+    padding: 6px 16px; width: fit-content; max-width: 100%; margin: 0 auto 30px auto;
     box-shadow: 4px 4px 0 var(--ink); transform: skew(-4deg);
   }
   .lang-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 14px; max-width: 720px; margin: 0 auto;
   }
   .comic-btn {
     background: #fff; color: var(--ink); border: 3px solid var(--ink);
     padding: 13px 16px; font-size: 16px; font-weight: 900;
     cursor: pointer; box-shadow: 5px 5px 0 var(--ink);
-    transform: skew(-6deg); transition: 0.15s;
+    transform: skew(-4deg); transition: 0.15s;
     font-family: 'Noto Sans KR', sans-serif;
   }
-  .comic-btn:hover { background: var(--comic-gold); transform: skew(-6deg) translate(-3px, -3px); box-shadow: 8px 8px 0 var(--ink); }
+  .comic-btn:hover { background: var(--comic-gold); transform: skew(-4deg) translate(-2px, -2px); box-shadow: 7px 7px 0 var(--ink); }
 
   /* 1.5단계: 미니게임 */
   #battle-gate {
@@ -104,8 +105,8 @@
   }
   .battle-banner {
     background: #111; color: var(--comic-gold); border: 3px solid var(--ink);
-    display: inline-block; padding: 6px 20px; font-weight: 900; font-size: 18px;
-    transform: skew(-6deg); box-shadow: 4px 4px 0 var(--comic-red); margin-bottom: 8px;
+    display: inline-block; padding: 6px 16px; font-weight: 900; font-size: clamp(14px, 4vw, 18px);
+    transform: skew(-4deg); box-shadow: 4px 4px 0 var(--comic-red); margin-bottom: 8px; max-width: 100%;
   }
   .villain-arena {
     max-width: 340px; margin: 0 auto; background: #2b1b3d; color: #fff;
@@ -133,11 +134,11 @@
   .pow-fx {
     position: fixed; pointer-events: none; z-index: 9999;
     background: var(--comic-gold); color: var(--comic-red);
-    border: 3px solid #111; padding: 6px 14px;
+    border: 3px solid #111; padding: 5px 12px;
     font-family: 'Bangers', 'Noto Sans KR', cursive;
-    font-size: 32px; font-weight: 900; text-shadow: 2px 2px 0 #111;
+    font-size: 28px; font-weight: 900; text-shadow: 2px 2px 0 #111;
     box-shadow: 4px 4px 0 #111;
-    animation: powBurst 0.42s forwards;
+    animation: powBurst 0.4s forwards;
   }
   .ko-stamp {
     display: none; position: absolute; top: 42%; left: 50%;
@@ -155,26 +156,26 @@
     box-shadow: 7px 7px 0 var(--ink);
   }
   .rank-result-badge {
-    display: inline-block; padding: 4px 18px; font-size: 28px; font-weight: 900;
+    display: inline-block; padding: 4px 18px; font-size: 26px; font-weight: 900;
     border: 3px solid var(--ink); box-shadow: 4px 4px 0 var(--ink);
-    transform: skew(-8deg); margin: 6px 0;
+    transform: skew(-6deg); margin: 6px 0;
   }
 
   /* 2단계: 메인 아카이브 */
-  #main-archive { display: none; }
+  #main-archive { display: none; width: 100%; }
   .top-header {
     display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
     background: var(--comic-red); color: #fff; border: 3px solid var(--ink);
-    padding: 10px 16px; box-shadow: 5px 5px 0 var(--ink); margin-bottom: 12px; gap: 10px;
+    padding: 10px 14px; box-shadow: 5px 5px 0 var(--ink); margin-bottom: 12px; gap: 10px;
   }
-  .top-header h1 { margin: 0; font-size: clamp(18px, 3.8vw, 28px); font-weight: 900; text-shadow: 2px 2px 0 var(--ink); transform: skew(-4deg); }
+  .top-header h1 { margin: 0; font-size: clamp(17px, 3.8vw, 28px); font-weight: 900; text-shadow: 2px 2px 0 var(--ink); transform: skew(-3deg); }
   .header-btn-group { display: flex; flex-wrap: wrap; gap: 8px; }
   .back-lang-btn {
     background: var(--comic-gold); color: var(--ink); border: 2px solid var(--ink);
-    padding: 6px 11px; font-weight: 900; cursor: pointer; box-shadow: 3px 3px 0 var(--ink);
-    transform: skew(-6deg); font-size: 12px; transition: 0.12s;
+    padding: 6px 10px; font-weight: 900; cursor: pointer; box-shadow: 3px 3px 0 var(--ink);
+    font-size: 12px; transition: 0.12s;
   }
-  .back-lang-btn:hover { background: #fff; transform: skew(-6deg) translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink); }
+  .back-lang-btn:hover { background: #fff; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
 
   /* 로어북 [XX] 태그 필수 안내 배너 */
   .lore-notice-banner {
@@ -194,11 +195,11 @@
     border-bottom: 3px solid var(--ink); padding-bottom: 14px;
   }
   .tab-btn {
-    flex: 1 1 auto; min-width: 115px; background: #fff; border: 3px solid var(--ink);
-    padding: 9px 10px; font-size: 14px; font-weight: 900; cursor: pointer;
-    box-shadow: 4px 4px 0 var(--ink); transform: skew(-6deg); transition: 0.15s; text-align: center;
+    flex: 1 1 auto; min-width: 105px; background: #fff; border: 3px solid var(--ink);
+    padding: 9px 8px; font-size: 13.5px; font-weight: 900; cursor: pointer;
+    box-shadow: 4px 4px 0 var(--ink); transition: 0.15s; text-align: center;
   }
-  .tab-btn:hover { transform: skew(-6deg) translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+  .tab-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
   .tab-btn.active-world { background: var(--comic-gold); color: #111; }
   .tab-btn.active-hero { background: var(--comic-blue); color: #fff; }
   .tab-btn.active-villain { background: var(--comic-purple); color: #fff; }
@@ -213,12 +214,12 @@
   }
   .hub-filter { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
   .hub-btn {
-    background: #fff; border: 2px solid var(--ink); padding: 5px 11px;
+    background: #fff; border: 2px solid var(--ink); padding: 5px 10px;
     font-size: 12px; font-weight: 900; cursor: pointer;
-    box-shadow: 2px 2px 0 var(--ink); transform: skew(-6deg);
+    box-shadow: 2px 2px 0 var(--ink);
     display: inline-flex; align-items: center; gap: 5px;
   }
-  .hub-btn img { width: 16px; height: 16px; object-fit: contain; border-radius: 2px; }
+  .hub-btn img { width: 18px; height: 18px; object-fit: contain; border-radius: 3px; background: #fff; border: 1px solid #111; }
   .hub-btn.active { background: var(--ink); color: var(--comic-gold); }
 
   .search-box-wrap {
@@ -238,17 +239,42 @@
     box-shadow: 2px 2px 0 var(--ink); font-size: 12px; white-space: nowrap;
   }
 
-  /* 로고 이미지 공통 스타일 */
-  .card-logo-group {
-    display: inline-flex; align-items: center; gap: 4px;
+  /* ==================== 4대 세력 로고 시인성 강화 스타일 (크기는 콤팩트하게, 이름표 결합!) ==================== */
+  .emblem-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 8px;
+    margin: 12px 0;
   }
-  .card-logo-badge {
-    width: 24px; height: 24px; object-fit: contain;
-    border: 1.5px solid #111; border-radius: 4px; background: #fff; padding: 1px;
-    box-shadow: 2px 2px 0 #111;
+  .emblem-chip {
+    display: flex; align-items: center; gap: 10px;
+    background: #fff; border: 2.5px solid #111; padding: 6px 10px;
+    box-shadow: 3px 3px 0 #111; border-radius: 4px;
+  }
+  .emblem-chip img {
+    width: 34px; height: 34px; object-fit: contain;
+    background: #fff; border: 2px solid #111; border-radius: 6px; padding: 2px;
+    flex-shrink: 0;
+  }
+  .emblem-chip-info { line-height: 1.25; font-size: 11.5px; }
+  .emblem-chip-title { font-weight: 900; font-size: 13px; color: #111; }
+
+  /* 캐릭터 카드 & 장소 카드에 붙는 '로고+소속명' 일체형 캡슐 배지 */
+  .card-logo-group {
+    display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px;
+  }
+  .faction-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 7px 2px 3px; border: 1.5px solid #111; border-radius: 4px;
+    font-size: 11px; font-weight: 900; color: #fff;
+    box-shadow: 2px 2px 0 #111; line-height: 1;
+  }
+  .faction-pill img {
+    width: 18px; height: 18px; object-fit: contain;
+    background: #fff; border-radius: 3px; border: 1px solid #111; padding: 1px;
   }
 
-  /* 9대 주요 장소(Locations) 그리드 & 카드 (모바일 삐져나옴 방지 + 원본 비율 100% 표시) */
+  /* 9대 주요 장소(Locations) 그리드 & 카드 */
   .loc-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -285,17 +311,22 @@
     transition: 0.3s;
   }
   .loc-card:hover .loc-img-wrap img.loc-bg { transform: scale(1.03); }
-  .loc-overlay-logo {
+  .loc-overlay-pill {
     position: absolute; top: 8px; right: 8px;
-    width: 36px; height: 36px; object-fit: contain;
-    background: #fff; border: 2px solid #111; border-radius: 6px;
-    padding: 2px; box-shadow: 3px 3px 0 #111;
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px 3px 4px; border: 2px solid #111; border-radius: 6px;
+    font-size: 11.5px; font-weight: 900; color: #fff;
+    box-shadow: 3px 3px 0 #111;
+  }
+  .loc-overlay-pill img {
+    width: 24px; height: 24px; object-fit: contain;
+    background: #fff; border: 1.5px solid #111; border-radius: 4px; padding: 1px;
   }
   .loc-hub-pill {
     position: absolute; bottom: 8px; left: 8px;
-    background: rgba(17,17,17,0.9); color: var(--comic-gold);
+    background: rgba(17,17,17,0.92); color: var(--comic-gold);
     border: 1.5px solid var(--comic-gold); padding: 2px 8px;
-    font-size: 11px; font-weight: 900; transform: skew(-6deg);
+    font-size: 11px; font-weight: 900;
   }
   .loc-body { font-size: 12.5px; line-height: 1.5; word-break: keep-all; }
   .loc-title { font-size: 16px; font-weight: 900; margin-bottom: 5px; color: #111; }
@@ -319,12 +350,12 @@
     width: 100%; height: auto; display: block; transition: 0.3s;
   }
   .char-card:hover .char-img-wrap img { transform: scale(1.03); }
-  .badge-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .badge-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px; margin-bottom: 6px; }
   .rank-badge {
     padding: 2px 8px; font-size: 12px; font-weight: 900; border: 2px solid var(--ink);
-    box-shadow: 2px 2px 0 var(--ink); transform: skew(-8deg); cursor: pointer;
+    box-shadow: 2px 2px 0 var(--ink); cursor: pointer;
   }
-  .hub-tag { font-size: 12px; font-weight: 900; color: var(--comic-red); display: inline-flex; align-items: center; gap: 5px; }
+  .hub-tag { font-size: 12px; font-weight: 900; color: var(--comic-red); display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px; }
   .char-title { font-size: 18px; font-weight: 900; margin: 2px 0; }
   .char-realname { font-size: 12.5px; color: #555; font-weight: 700; }
   .char-meta {
@@ -344,7 +375,7 @@
   .panel-badge {
     display: inline-block; background: var(--comic-gold); color: var(--ink);
     border: 2px solid var(--ink); padding: 3px 10px; font-weight: 900;
-    transform: skew(-8deg); box-shadow: 2px 2px 0 var(--ink); margin-bottom: 10px; font-size: 14px;
+    box-shadow: 2px 2px 0 var(--ink); margin-bottom: 10px; font-size: 14px;
   }
   .tracker-pre {
     width: 100%; height: 230px; overflow-y: auto;
@@ -355,11 +386,11 @@
   .copy-btn {
     background: var(--comic-red); color: #fff; border: 2px solid var(--ink);
     padding: 7px 14px; font-weight: 900; cursor: pointer;
-    box-shadow: 3px 3px 0 var(--ink); transform: skew(-5deg); font-size: 12.5px;
+    box-shadow: 3px 3px 0 var(--ink); font-size: 12.5px;
   }
   .copy-btn:hover { background: #b71c1c; }
 
-  /* 우측 하단 8트랙 주크박스 플레이어 */
+  /* ==================== 우측 하단 커스텀 플레이리스트 주크박스 ==================== */
   .bgm-container {
     position: fixed; bottom: 12px; right: 12px; z-index: 9000;
     display: flex; flex-direction: column; align-items: flex-end;
@@ -370,32 +401,43 @@
     border: 3px solid var(--comic-gold);
     box-shadow: 6px 6px 0 #111;
     margin-bottom: 8px;
-    width: 310px;
-    max-height: 260px;
+    width: 340px;
+    max-height: 310px;
     overflow-y: auto;
     border-radius: 6px;
-    padding: 8px;
+    padding: 10px;
   }
   .bgm-playlist-header {
     color: var(--comic-gold); font-size: 12px; font-weight: 900;
-    border-bottom: 2px dashed #444; padding-bottom: 5px; margin-bottom: 6px;
-    display: flex; justify-content: space-between;
-  }
-  .bgm-track-item {
-    padding: 6px 8px; font-size: 11.5px; color: #ddd; font-weight: 700;
-    cursor: pointer; border-radius: 4px; margin-bottom: 3px;
+    border-bottom: 2px dashed #444; padding-bottom: 6px; margin-bottom: 6px;
     display: flex; justify-content: space-between; align-items: center;
-    transition: 0.12s;
   }
-  .bgm-track-item:hover { background: #333; color: #fff; }
+  .bgm-playlist-tools {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px; gap: 4px;
+  }
+  .bgm-tool-btn {
+    background: #333; color: #fff; border: 1px solid #666;
+    padding: 3px 7px; font-size: 10.5px; font-weight: 700; border-radius: 3px; cursor: pointer;
+  }
+  .bgm-tool-btn:hover { background: var(--comic-gold); color: #111; }
+  .bgm-track-item {
+    padding: 5px 6px; font-size: 11.5px; color: #ddd; font-weight: 700;
+    border-radius: 4px; margin-bottom: 4px; background: #242424;
+    display: flex; justify-content: space-between; align-items: center; gap: 5px;
+  }
   .bgm-track-item.active {
     background: var(--comic-gold); color: #111; font-weight: 900;
   }
-  .bgm-mood-tag {
-    font-size: 10px; padding: 1px 5px; border-radius: 3px;
-    background: #333; color: #aaa; margin-left: 6px; white-space: nowrap;
+  .bgm-track-item.disabled-track { opacity: 0.45; }
+  .bgm-track-title {
+    flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;
   }
-  .bgm-track-item.active .bgm-mood-tag { background: #111; color: var(--comic-gold); }
+  .bgm-order-btn {
+    background: rgba(0,0,0,0.35); color: inherit; border: 1px solid rgba(255,255,255,0.2);
+    padding: 1px 5px; font-size: 10px; cursor: pointer; border-radius: 3px; font-weight: 900;
+  }
+  .bgm-track-item.active .bgm-order-btn { border-color: #111; background: rgba(255,255,255,0.4); }
 
   .bgm-widget {
     background: #111; color: var(--comic-gold); border: 3px solid var(--comic-gold);
@@ -420,19 +462,20 @@
     color: #71b058; font-family: 'Consolas', monospace; font-size: 11.5px;
   }
 
-  /* 모바일 화면 최적화 (카드 넘침 완벽 방지) */
+  /* 모바일 화면 최적화 */
   @media (max-width: 600px) {
     .comic-wrapper {
-      margin: 10px 8px 140px 8px;
+      margin: 8px auto 140px auto;
+      width: calc(100% - 14px);
       padding: 12px 10px 55px 10px;
-      box-shadow: 5px 5px 0 var(--ink);
+      box-shadow: 4px 4px 0 var(--ink);
     }
-    .loc-grid, .char-grid {
+    .loc-grid, .char-grid, .emblem-showcase {
       grid-template-columns: 1fr;
     }
     .search-box-wrap { max-width: 100%; }
     .bgm-container { bottom: 8px; right: 8px; left: 8px; }
-    .bgm-playlist-popup { width: 100%; max-height: 210px; }
+    .bgm-playlist-popup { width: 100%; max-height: 240px; }
     .bgm-widget { width: 100%; justify-content: space-between; padding: 6px 8px; box-shadow: 3px 3px 0 var(--comic-red); }
     .bgm-title-marquee { flex: 1; width: auto; max-width: 125px; font-size: 11px; }
   }
@@ -543,12 +586,19 @@ function googleTranslateElementInit() {
 
 </div>
 
-<!-- ==================== 우측 하단 8트랙 OST 주크박스 플레이어 ==================== -->
+<!-- ==================== 우측 하단 커스텀 OST 주크박스 플레이어 ==================== -->
 <div class="bgm-container">
   <div class="bgm-playlist-popup" id="bgm-playlist-box">
     <div class="bgm-playlist-header">
-      <span>🎵 OFFICIAL OST PLAYLIST (8 TRACKS)</span>
-      <span style="cursor:pointer;color:#ff5252;" onclick="togglePlaylist()">✕</span>
+      <span id="playlist-header-title">🎵 MY OST PLAYLIST</span>
+      <span style="cursor:pointer;color:#ff5252;font-size:14px;" onclick="togglePlaylist()">✕</span>
+    </div>
+    <div class="bgm-playlist-tools">
+      <span style="font-size:10.5px;color:#aaa;">☑️체크: 재생 포함 / ▲▼: 순서 변경</span>
+      <div>
+        <button class="bgm-tool-btn" onclick="shufflePlaylist()" title="순서 랜덤 섞기">🔀 셔플</button>
+        <button class="bgm-tool-btn" onclick="resetPlaylist()" title="기본 순서로 초기화">↺ 초기화</button>
+      </div>
     </div>
     <div id="bgm-track-list"></div>
   </div>
@@ -567,13 +617,21 @@ function googleTranslateElementInit() {
 </div>
 
 <script>
-// ==================== 이미지 기본 경로 & 4대 단체 공식 로고 ====================
+// ==================== 이미지 기본 경로 & 4대 단체 공식 로고 메타데이터 ====================
 const IMG_BASE = "https://img.neze.org/HV/";
 const LOGOS = {
   HA: `${IMG_BASE}HA.png`,
   ASC: `${IMG_BASE}Ascenders.jpg`,
   VEN: `${IMG_BASE}Vendetta.jpg`,
   TEL: `${IMG_BASE}Telon.png`
+};
+
+// 로고 시인성을 높여줄 소속 캡슐 배지 정보 (이름 + 테마 컬러)
+const FACTION_META = {
+  ASC: { name: "어센더스", desc: "협회 최정예 특수부대", color: "#1565c0", logo: LOGOS.ASC },
+  HA:  { name: "히어로협회", desc: "하와이 본부·아카데미·교도소·수습본부", color: "#0277bd", logo: LOGOS.HA },
+  VEN: { name: "벤데타", desc: "글로벌 빌런 후원 신디케이트", color: "#6a1b9a", logo: LOGOS.VEN },
+  TEL: { name: "텔론그룹", desc: "세계 1위 초과학·기계 대기업", color: "#ef6c00", logo: LOGOS.TEL }
 };
 
 // ==================== 9대 주요 장소(Key Locations) 데이터 ====================
@@ -606,8 +664,8 @@ function playPunchSfx() {
   sfx.play().catch(() => {});
 }
 
-// ==================== 🎵 8트랙 OST 플레이리스트 데이터 ====================
-const BGM_LIST = [
+// ==================== 🎵 OST 플레이리스트 (나중에 곡 추가 시 아래 배열에 한 줄씩만 추가하세요!) ====================
+const DEFAULT_BGM_LIST = [
   { title: "01. Beyond the Limit! (아카데미의 아침)", mood: "Heroic", url: "https://img.neze.org/HV/bgm/hv1.mp3" },
   { title: "02. Kinetic Impact (최후의 방어선)", mood: "Epic", url: "https://img.neze.org/HV/bgm/hv2.mp3" },
   { title: "03. Ascenders, Assemble! (영웅의 귀환)", mood: "Hope", url: "https://img.neze.org/HV/bgm/hv3.mp3" },
@@ -616,31 +674,100 @@ const BGM_LIST = [
   { title: "06. Clash of Titans (무너지는 마천루)", mood: "Epic", url: "https://img.neze.org/HV/bgm/hv6.mp3" },
   { title: "07. New Horizon (하와이 포탈 네트워크)", mood: "Hope", url: "https://img.neze.org/HV/bgm/hv7.mp3" },
   { title: "08. Syndicate 'Vendetta' (빌런의 시대)", mood: "Dark", url: "https://img.neze.org/HV/bgm/hv8.mp3" }
+  // [곡 추가 방법] 위 줄 끝에 쉼표(,)를 찍고 아래처럼 한 줄을 추가하시면 자동으로 작동합니다!
+  // , { title: "09. 새로운 곡 제목", mood: "Epic", url: "https://img.neze.org/HV/bgm/hv9.mp3" }
 ];
 
+let userPlaylist = [];
 let currentBgmIdx = 0;
 const audioEl = document.getElementById('bgm-audio');
 
 function initBgmPlayer() {
+  // 저장된 커스텀 플레이리스트 불러오기 (새로 추가된 곡도 자동 병합)
+  const saved = localStorage.getItem('hv_custom_playlist_v1');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      const validSaved = parsed.filter(p => DEFAULT_BGM_LIST.some(d => d.url === p.url));
+      const newTracks = DEFAULT_BGM_LIST.filter(d => !validSaved.some(p => p.url === d.url)).map(d => ({ ...d, enabled: true }));
+      userPlaylist = [...validSaved, ...newTracks];
+    } catch (e) {
+      userPlaylist = DEFAULT_BGM_LIST.map(d => ({ ...d, enabled: true }));
+    }
+  } else {
+    userPlaylist = DEFAULT_BGM_LIST.map(d => ({ ...d, enabled: true }));
+  }
+
   loadTrack(0, false);
   renderPlaylist();
   audioEl.addEventListener('ended', () => nextBgm());
 }
 
+function saveCustomPlaylist() {
+  localStorage.setItem('hv_custom_playlist_v1', JSON.stringify(userPlaylist));
+}
+
 function renderPlaylist() {
+  const headerEl = document.getElementById('playlist-header-title');
+  const activeCount = userPlaylist.filter(t => t.enabled).length;
+  if (headerEl) headerEl.innerText = `🎵 MY OST PLAYLIST (${activeCount}/${userPlaylist.length}곡 선택됨)`;
+
   const listEl = document.getElementById('bgm-track-list');
-  listEl.innerHTML = BGM_LIST.map((t, idx) => `
-    <div class="bgm-track-item ${idx === currentBgmIdx ? 'active' : ''}" onclick="selectTrack(${idx})">
-      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.title}</span>
-      <span class="bgm-mood-tag">${t.mood}</span>
+  listEl.innerHTML = userPlaylist.map((t, idx) => `
+    <div class="bgm-track-item ${idx === currentBgmIdx ? 'active' : ''} ${!t.enabled ? 'disabled-track' : ''}">
+      <input type="checkbox" ${t.enabled ? 'checked' : ''} onchange="toggleTrackEnable(${idx}, event)" title="내 플레이리스트에 포함/제외" style="cursor:pointer;">
+      <span class="bgm-track-title" onclick="selectTrack(${idx})">${t.title}</span>
+      <div style="display:flex;gap:2px;">
+        <button class="bgm-order-btn" onclick="moveTrack(${idx}, -1, event)" title="위로 이동">▲</button>
+        <button class="bgm-order-btn" onclick="moveTrack(${idx}, 1, event)" title="아래로 이동">▼</button>
+      </div>
     </div>
   `).join('');
 }
 
+function toggleTrackEnable(idx, e) {
+  e.stopPropagation();
+  userPlaylist[idx].enabled = e.target.checked;
+  saveCustomPlaylist();
+  renderPlaylist();
+}
+
+function moveTrack(idx, dir, e) {
+  e.stopPropagation();
+  const targetIdx = idx + dir;
+  if (targetIdx < 0 || targetIdx >= userPlaylist.length) return;
+
+  const currentUrl = userPlaylist[currentBgmIdx].url;
+  const temp = userPlaylist[idx];
+  userPlaylist[idx] = userPlaylist[targetIdx];
+  userPlaylist[targetIdx] = temp;
+
+  currentBgmIdx = userPlaylist.findIndex(t => t.url === currentUrl);
+  saveCustomPlaylist();
+  renderPlaylist();
+}
+
+function shufflePlaylist() {
+  const currentUrl = userPlaylist[currentBgmIdx].url;
+  for (let i = userPlaylist.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [userPlaylist[i], userPlaylist[j]] = [userPlaylist[j], userPlaylist[i]];
+  }
+  currentBgmIdx = userPlaylist.findIndex(t => t.url === currentUrl);
+  saveCustomPlaylist();
+  renderPlaylist();
+}
+
+function resetPlaylist() {
+  userPlaylist = DEFAULT_BGM_LIST.map(d => ({ ...d, enabled: true }));
+  localStorage.removeItem('hv_custom_playlist_v1');
+  loadTrack(0, !audioEl.paused);
+}
+
 function loadTrack(idx, autoPlay = true) {
   currentBgmIdx = idx;
-  audioEl.src = BGM_LIST[idx].url;
-  document.getElementById('bgm-current-title').innerText = BGM_LIST[idx].title;
+  audioEl.src = userPlaylist[idx].url;
+  document.getElementById('bgm-current-title').innerText = userPlaylist[idx].title;
   renderPlaylist();
   if (autoPlay) {
     audioEl.play().then(() => {
@@ -649,7 +776,11 @@ function loadTrack(idx, autoPlay = true) {
   }
 }
 
-function selectTrack(idx) { loadTrack(idx, true); }
+function selectTrack(idx) {
+  userPlaylist[idx].enabled = true;
+  saveCustomPlaylist();
+  loadTrack(idx, true);
+}
 
 function toggleBgm() {
   const btn = document.getElementById('bgm-toggle-btn');
@@ -663,11 +794,27 @@ function toggleBgm() {
 }
 
 function prevBgm() {
-  loadTrack((currentBgmIdx - 1 + BGM_LIST.length) % BGM_LIST.length, true);
+  const len = userPlaylist.length;
+  for (let step = 1; step <= len; step++) {
+    const idx = (currentBgmIdx - step + len) % len;
+    if (userPlaylist[idx].enabled) {
+      loadTrack(idx, true);
+      return;
+    }
+  }
+  loadTrack((currentBgmIdx - 1 + len) % len, true);
 }
 
 function nextBgm() {
-  loadTrack((currentBgmIdx + 1) % BGM_LIST.length, true);
+  const len = userPlaylist.length;
+  for (let step = 1; step <= len; step++) {
+    const idx = (currentBgmIdx + step) % len;
+    if (userPlaylist[idx].enabled) {
+      loadTrack(idx, true);
+      return;
+    }
+  }
+  loadTrack((currentBgmIdx + 1) % len, true);
 }
 
 function togglePlaylist() {
@@ -683,7 +830,7 @@ function minimizeBgm(isMini) {
 
 initBgmPlayer();
 
-// ==================== 캐릭터 전체 데이터베이스 ====================
+// ==================== 캐릭터 전체 데이터베이스 (최신 업데이트 설명 보존!) ====================
 const CHARACTERS = [
   // [1. HEROES - ASCENDERS]
   { cat:"hero", sub:"ASC", logos:["ASC","HA"], hub:"하와이", tag:"KN", rank:"S급", name:"키네틱", real:"마야 스톤", sex:"여", age:"30세", role:"하와이 본사 · 3대 어센더스 리더", ability:"운동에너지 흡수·증폭 방출, 비행", pers:"과묵함, 리더십, 온화함", lore:"고아 출신으로 어린 나이에 각성해 아버지 같은 워프에게 발탁되었다. 자신의 우상이자 친오빠처럼 따르던 캡틴 네오가 어센더스 동료 절반을 학살하고 배신한 날의 참혹한 트라우마를 안은 채, 무너진 어센더스를 이끌며 네오의 진의를 추적한다." },
@@ -813,14 +960,18 @@ function punchVillain(e) {
   villainHp--;
   playPunchSfx();
 
+  // 모바일 화면 밖으로 말풍선이 튀어나가 가로 스크롤이 생기는 것을 방지하기 위해 X좌표 안전 범위 제한
   const words = ["POW!!", "BAM!!", "SMASH!!", "WHAM!!", "퍽!!", "콰직!!", "CRACK!!"];
   const fx = document.createElement('div');
   fx.className = 'pow-fx';
   fx.innerText = words[Math.floor(Math.random() * words.length)];
-  fx.style.left = (e.clientX || window.innerWidth / 2) + 'px';
-  fx.style.top = (e.clientY || window.innerHeight / 2) + 'px';
+  const rawX = e.clientX || (window.innerWidth / 2);
+  const rawY = e.clientY || (window.innerHeight / 2);
+  const safeX = Math.max(70, Math.min(window.innerWidth - 70, rawX));
+  fx.style.left = safeX + 'px';
+  fx.style.top = rawY + 'px';
   document.body.appendChild(fx);
-  setTimeout(() => fx.remove(), 420);
+  setTimeout(() => fx.remove(), 400);
 
   const box = document.getElementById('villain-box');
   box.classList.remove('shake-anim');
@@ -857,6 +1008,10 @@ function showBattleRankResult(sec) {
 }
 
 function openMainArchive() {
+  // 잔여 펀치 이펙트 즉시 제거 및 스크롤 초기화 (모바일 간격 벌어짐 방지)
+  document.querySelectorAll('.pow-fx').forEach(el => el.remove());
+  window.scrollTo(0, 0);
+
   document.getElementById('battle-gate').style.display = 'none';
   const main = document.getElementById('main-archive');
   main.style.display = 'block';
@@ -949,10 +1104,15 @@ function clearSearch() {
   renderContent();
 }
 
+// 캐릭터 카드 생성 (로고 + 소속명 일체형 캡슐 배지로 시인성 대폭 강화!)
 function buildCharCardHtml(c) {
   const colorMap = { hero: '#1e88e5', villain: '#8e24aa', civilian: '#43a047', trans: '#111111' };
   const themeColor = colorMap[c.cat] || '#111';
-  const logosHtml = (c.logos || []).map(k => `<img src="${LOGOS[k]}" class="card-logo-badge" title="${k}">`).join('');
+  const logosHtml = (c.logos || []).map(k => {
+    const meta = FACTION_META[k];
+    if (!meta) return '';
+    return `<span class="faction-pill" style="background:${meta.color};"><img src="${meta.logo}" alt="${meta.name}">${meta.name}</span>`;
+  }).join('');
 
   return `
     <div class="char-card" style="border-top: 7px solid ${themeColor};">
@@ -1005,27 +1165,47 @@ function renderContent() {
     return;
   }
 
-  // [1] 세계관 & 9대 주요 장소 탭 (중복 텍스트 제거 + 첫 문장 & 랭크 -> 신문기사 -> 9개 장소 카드 순)
+  // [1] 세계관 & 9대 주요 장소 탭 (4대 로고 공식 엠블럼 소개 바 + 장소 카드 캡슐 로고 적용)
   if (currentCategory === 'world') {
-    const locCardsHtml = KEY_LOCATIONS.map(loc => `
-      <div class="loc-card" style="border-top: 7px solid #e53935;">
-        <div class="loc-img-wrap">
-          <img class="loc-bg" src="${IMG_BASE}${loc.img}" alt="${loc.name}">
-          ${loc.logo ? `<img class="loc-overlay-logo" src="${LOGOS[loc.logo]}" alt="${loc.logo}">` : ''}
-          <span class="loc-hub-pill">📍 ${loc.hub}</span>
+    const locCardsHtml = KEY_LOCATIONS.map(loc => {
+      const meta = loc.logo ? FACTION_META[loc.logo] : null;
+      return `
+        <div class="loc-card" style="border-top: 7px solid ${meta ? meta.color : '#e53935'};">
+          <div class="loc-img-wrap">
+            <img class="loc-bg" src="${IMG_BASE}${loc.img}" alt="${loc.name}">
+            ${meta ? `<span class="loc-overlay-pill" style="background:${meta.color};"><img src="${meta.logo}" alt="${meta.name}">${meta.name}</span>` : ''}
+            <span class="loc-hub-pill">📍 ${loc.hub}</span>
+          </div>
+          <div class="loc-body">
+            <div class="loc-title">${loc.name} <span style="font-size:11.5px;color:#666;font-weight:700;">(${loc.eng})</span></div>
+            <div>${loc.desc}</div>
+          </div>
         </div>
-        <div class="loc-body">
-          <div class="loc-title">${loc.name} <span style="font-size:11.5px;color:#666;font-weight:700;">(${loc.eng})</span></div>
-          <div>${loc.desc}</div>
+      `;
+    }).join('');
+
+    const emblemShowcaseHtml = Object.keys(FACTION_META).map(k => {
+      const m = FACTION_META[k];
+      return `
+        <div class="emblem-chip" style="border-left: 7px solid ${m.color};">
+          <img src="${m.logo}" alt="${m.name}">
+          <div class="emblem-chip-info">
+            <div class="emblem-chip-title">${m.name}</div>
+            <div style="color:#555;">${m.desc}</div>
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
 
     area.innerHTML = `
-      <!-- 1. 세계관 한 줄 소개 + 랭크 시스템 -->
+      <!-- 1. 세계관 한 줄 소개 + 4대 공식 로고 엠블럼 바 + 랭크 시스템 -->
       <div style="background:#fff3c4 radial-gradient(rgba(0,0,0,.13) 1.2px,transparent 1.5px) 0 0/7px 7px;border:3px solid #111;border-radius:6px;padding:14px;color:#111;box-shadow:6px 6px 0 #111;line-height:1.6;word-break:keep-all;margin-bottom:18px;user-select:text">
-        <div style="background:#1e88e5;color:#fff;border:2px solid #111;padding:3px 12px;display:inline-block;font-weight:900;transform:skew(-6deg);box-shadow:3px 3px 0 #111;margin-bottom:10px;font-size:16px">🌍 WORLD</div>
-        <div style="font-size:14.5px;margin-bottom:12px">초능력이 각성하는 세계. 인류는 <b>히어로</b>와 <b>빌런</b>으로 갈라섰다. 주요 거점은 <b>서울 · 도쿄 · 뉴욕</b>이며, 실제 랜드마크가 그대로 무대가 된다.</div>
+        <div style="background:#1e88e5;color:#fff;border:2px solid #111;padding:3px 12px;display:inline-block;font-weight:900;box-shadow:3px 3px 0 #111;margin-bottom:10px;font-size:16px">🌍 WORLD</div>
+        <div style="font-size:14.5px;margin-bottom:10px">초능력이 각성하는 세계. 인류는 <b>히어로</b>와 <b>빌런</b>으로 갈라섰다. 주요 거점은 <b>서울 · 도쿄 · 뉴욕</b>이며, 실제 랜드마크가 그대로 무대가 된다.</div>
+        
+        <!-- 4대 핵심 세력 공식 로고 소개 바 -->
+        <div class="emblem-showcase">${emblemShowcaseHtml}</div>
+
         <div style="background:#111;color:#fff;border:2px solid #111;padding:8px 12px;font-size:13px;box-shadow:3px 3px 0 #e53935"><b style="color:#ffd600">RANK</b> <b style="color:#ff5252">EX</b> 규격 외 › <b style="color:#ffd600">S</b> 도시재난급·간부 › <b style="color:#ffd600">A</b> 최상위·어센더스 › <b style="color:#ffd600">B</b> 중위·아카데미 정예 › <b style="color:#ffd600">C</b> 하위·미숙 › <b style="color:#ffd600">D</b> 비전투원급</div>
       </div>
 
@@ -1054,7 +1234,7 @@ function renderContent() {
 
       <!-- 3. 세계관 단체 & 9대 주요 장소 상세 카드 -->
       <div style="margin-bottom:8px;">
-        <div style="background:#e53935;color:#fff;border:2px solid #111;padding:4px 14px;display:inline-block;font-weight:900;transform:skew(-6deg);box-shadow:3px 3px 0 #111;font-size:16px">📍 FACTIONS & KEY LOCATIONS (주요 세력 및 무대)</div>
+        <div style="background:#e53935;color:#fff;border:2px solid #111;padding:4px 14px;display:inline-block;font-weight:900;box-shadow:3px 3px 0 #111;font-size:16px">📍 FACTIONS & KEY LOCATIONS (주요 세력 및 무대)</div>
       </div>
       <div class="loc-grid">${locCardsHtml}</div>
     `;
