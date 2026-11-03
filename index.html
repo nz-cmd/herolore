@@ -239,11 +239,6 @@
   }
 
   /* 로고 이미지 공통 스타일 */
-  .faction-logo-inline {
-    width: 26px; height: 26px; object-fit: contain; vertical-align: middle;
-    border: 1.5px solid #111; border-radius: 4px; background: #fff; padding: 1px;
-    margin-right: 5px; box-shadow: 2px 2px 0 #111;
-  }
   .card-logo-group {
     display: inline-flex; align-items: center; gap: 4px;
   }
@@ -253,24 +248,43 @@
     box-shadow: 2px 2px 0 #111;
   }
 
-  /* 9대 주요 장소(Locations) 그리드 & 카드 */
+  /* 9대 주요 장소(Locations) 그리드 & 카드 (모바일 삐져나옴 방지 + 원본 비율 100% 표시) */
   .loc-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 14px; margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+    margin-top: 10px;
+    width: 100%;
+    align-items: start;
   }
   .loc-card {
-    background: #fff; border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--ink);
-    overflow: hidden; display: flex; flex-direction: column; transition: 0.18s;
+    background: #fff;
+    border: 3px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    transition: 0.18s;
+    width: 100%;
+    height: 100%;
+    user-select: text;
   }
   .loc-card:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--ink); }
   .loc-img-wrap {
-    width: 100%; aspect-ratio: 16 / 10; background: #111;
-    border-bottom: 3px solid var(--ink); position: relative; overflow: hidden;
+    width: 100%;
+    background: #111;
+    border: 2px solid var(--ink);
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
   }
   .loc-img-wrap img.loc-bg {
-    width: 100%; height: 100%; object-fit: cover; display: block; transition: 0.3s;
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: 0.3s;
   }
-  .loc-card:hover .loc-img-wrap img.loc-bg { transform: scale(1.05); }
+  .loc-card:hover .loc-img-wrap img.loc-bg { transform: scale(1.03); }
   .loc-overlay-logo {
     position: absolute; top: 8px; right: 8px;
     width: 36px; height: 36px; object-fit: contain;
@@ -283,18 +297,18 @@
     border: 1.5px solid var(--comic-gold); padding: 2px 8px;
     font-size: 11px; font-weight: 900; transform: skew(-6deg);
   }
-  .loc-body { padding: 10px 12px; font-size: 12.5px; line-height: 1.45; }
-  .loc-title { font-size: 15.5px; font-weight: 900; margin-bottom: 4px; color: #111; }
+  .loc-body { font-size: 12.5px; line-height: 1.5; word-break: keep-all; }
+  .loc-title { font-size: 16px; font-weight: 900; margin-bottom: 5px; color: #111; }
 
   /* 캐릭터 그리드 및 카드 */
   .char-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(275px, 1fr)); gap: 16px;
-    align-items: start;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px;
+    align-items: start; width: 100%;
   }
   .char-card {
     background: #fff; border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--ink);
     padding: 12px; display: flex; flex-direction: column; transition: 0.18s; user-select: text;
-    height: 100%;
+    height: 100%; width: 100%;
   }
   .char-card:hover { transform: translate(-4px, -4px); box-shadow: 9px 9px 0 var(--ink); }
   .char-img-wrap {
@@ -406,12 +420,15 @@
     color: #71b058; font-family: 'Consolas', monospace; font-size: 11.5px;
   }
 
-  /* 모바일 화면 최적화 */
+  /* 모바일 화면 최적화 (카드 넘침 완벽 방지) */
   @media (max-width: 600px) {
     .comic-wrapper {
       margin: 10px 8px 140px 8px;
-      padding: 12px 12px 55px 12px;
+      padding: 12px 10px 55px 10px;
       box-shadow: 5px 5px 0 var(--ink);
+    }
+    .loc-grid, .char-grid {
+      grid-template-columns: 1fr;
     }
     .search-box-wrap { max-width: 100%; }
     .bgm-container { bottom: 8px; right: 8px; left: 8px; }
@@ -666,7 +683,7 @@ function minimizeBgm(isMini) {
 
 initBgmPlayer();
 
-// ==================== 캐릭터 전체 데이터베이스 (어센더스 최상단 + 로고 자동 매핑) ====================
+// ==================== 캐릭터 전체 데이터베이스 ====================
 const CHARACTERS = [
   // [1. HEROES - ASCENDERS]
   { cat:"hero", sub:"ASC", logos:["ASC","HA"], hub:"하와이", tag:"KN", rank:"S급", name:"키네틱", real:"마야 스톤", sex:"여", age:"30세", role:"하와이 본사 · 3대 어센더스 리더", ability:"운동에너지 흡수·증폭 방출, 비행", pers:"과묵함, 리더십, 온화함", lore:"고아 출신으로 어린 나이에 각성해 아버지 같은 워프에게 발탁되었다. 자신의 우상이자 친오빠처럼 따르던 캡틴 네오가 어센더스 동료 절반을 학살하고 배신한 날의 참혹한 트라우마를 안은 채, 무너진 어센더스를 이끌며 네오의 진의를 추적한다." },
@@ -737,7 +754,7 @@ const CHARACTERS = [
 
 let selectedLang = 'ko';
 let currentCategory = 'world';
-let currentFilterType = 'ALL'; // ALL, HUB:서울, SUB:ASC 등
+let currentFilterType = 'ALL';
 let searchQuery = '';
 const MAX_HP = 10;
 let villainHp = MAX_HP;
@@ -932,7 +949,6 @@ function clearSearch() {
   renderContent();
 }
 
-// 캐릭터 카드 HTML 생성 헬퍼 (소속 로고 아이콘 포함!)
 function buildCharCardHtml(c) {
   const colorMap = { hero: '#1e88e5', villain: '#8e24aa', civilian: '#43a047', trans: '#111111' };
   const themeColor = colorMap[c.cat] || '#111';
@@ -989,52 +1005,32 @@ function renderContent() {
     return;
   }
 
-  // [1] 세계관 & 9대 주요 장소 탭 (4대 로고 + 9장 배경 이미지 갤러리 적용!)
+  // [1] 세계관 & 9대 주요 장소 탭 (중복 텍스트 제거 + 첫 문장 & 랭크 -> 신문기사 -> 9개 장소 카드 순)
   if (currentCategory === 'world') {
     const locCardsHtml = KEY_LOCATIONS.map(loc => `
-      <div class="loc-card">
+      <div class="loc-card" style="border-top: 7px solid #e53935;">
         <div class="loc-img-wrap">
           <img class="loc-bg" src="${IMG_BASE}${loc.img}" alt="${loc.name}">
           ${loc.logo ? `<img class="loc-overlay-logo" src="${LOGOS[loc.logo]}" alt="${loc.logo}">` : ''}
           <span class="loc-hub-pill">📍 ${loc.hub}</span>
         </div>
         <div class="loc-body">
-          <div class="loc-title">${loc.name} <span style="font-size:11px;color:#666;font-weight:700;">(${loc.eng})</span></div>
+          <div class="loc-title">${loc.name} <span style="font-size:11.5px;color:#666;font-weight:700;">(${loc.eng})</span></div>
           <div>${loc.desc}</div>
         </div>
       </div>
     `).join('');
 
     area.innerHTML = `
+      <!-- 1. 세계관 한 줄 소개 + 랭크 시스템 -->
       <div style="background:#fff3c4 radial-gradient(rgba(0,0,0,.13) 1.2px,transparent 1.5px) 0 0/7px 7px;border:3px solid #111;border-radius:6px;padding:14px;color:#111;box-shadow:6px 6px 0 #111;line-height:1.6;word-break:keep-all;margin-bottom:18px;user-select:text">
-        <div style="background:#1e88e5;color:#fff;border:2px solid #111;padding:3px 12px;display:inline-block;font-weight:900;transform:skew(-6deg);box-shadow:3px 3px 0 #111;margin-bottom:10px;font-size:16px">🌍 WORLD & FACTIONS</div>
-        <div style="font-size:14px;margin-bottom:12px">초능력이 각성하는 세계. 인류는 <b>히어로</b>와 <b>빌런</b>으로 갈라섰다. 주요 거점은 <b>서울 · 도쿄 · 뉴욕</b>이며, 실제 랜드마크가 그대로 무대가 된다.</div>
-
-        <div style="background:#fff;border:2px solid #111;border-left:8px solid #1e88e5;padding:10px 12px;margin-bottom:8px;font-size:13.5px;box-shadow:3px 3px 0 #111">
-          <img src="${LOGOS.HA}" class="faction-logo-inline"><b>히어로 협회 (Hero Association)</b> 히어로를 등록·관리하는 세계 조직. 본부는 하와이, 지부는 서울·도쿄·뉴욕. 협회장 워프(WP)의 포탈로 전 지부가 실시간 연결된다.<br>
-          <div style="margin-top:6px;padding-left:6px;">
-            ▸ <img src="${LOGOS.ASC}" class="faction-logo-inline" style="width:20px;height:20px;"><b>어센더스</b> 엘리트 특수부대 (📍<b>구 본부 폐허</b>: 학살 현장)<br>
-            ▸ <b>아카데미</b> 예비 히어로 양성 기관 (📍<b>훈련 돔</b>: 가상 전장)<br>
-            ▸ <b>빌런 교도소</b> 체포된 빌런 격리·교화 (📍<b>심해 감옥</b>: 능력 억제 요새)<br>
-            ▸ <b>수습본부</b> 전투로 부서진 도시 복구
-          </div>
-        </div>
-
-        <div style="background:#fff;border:2px solid #111;border-left:8px solid #8e24aa;padding:10px 12px;margin-bottom:8px;font-size:13.5px;box-shadow:3px 3px 0 #111">
-          <img src="${LOGOS.VEN}" class="faction-logo-inline"><b>벤데타 (Vendetta)</b> 정체를 숨긴 채 빌런을 후원하는 신디케이트. (📍<b>뉴욕 지하 아지트</b>: 초인 암시장·무법지대)
-        </div>
-        <div style="background:#fff;border:2px solid #111;border-left:8px solid #fb8c00;padding:10px 12px;margin-bottom:8px;font-size:13.5px;box-shadow:3px 3px 0 #111">
-          <img src="${LOGOS.TEL}" class="faction-logo-inline"><b>텔론 (Telon)</b> 공학·기술 분야 세계 1위 대기업. (📍<b>텔론 타워</b>: 뉴욕 본사·강화복 격납고)
-        </div>
-        <div style="background:#fff;border:2px solid #111;border-left:8px solid #43a047;padding:10px 12px;margin-bottom:12px;font-size:13.5px;box-shadow:3px 3px 0 #111">
-          <b>📰 히어로 타임즈 (The Hero Times)</b> 히어로 관련 뉴스 전문 언론사.
-        </div>
-
+        <div style="background:#1e88e5;color:#fff;border:2px solid #111;padding:3px 12px;display:inline-block;font-weight:900;transform:skew(-6deg);box-shadow:3px 3px 0 #111;margin-bottom:10px;font-size:16px">🌍 WORLD</div>
+        <div style="font-size:14.5px;margin-bottom:12px">초능력이 각성하는 세계. 인류는 <b>히어로</b>와 <b>빌런</b>으로 갈라섰다. 주요 거점은 <b>서울 · 도쿄 · 뉴욕</b>이며, 실제 랜드마크가 그대로 무대가 된다.</div>
         <div style="background:#111;color:#fff;border:2px solid #111;padding:8px 12px;font-size:13px;box-shadow:3px 3px 0 #e53935"><b style="color:#ffd600">RANK</b> <b style="color:#ff5252">EX</b> 규격 외 › <b style="color:#ffd600">S</b> 도시재난급·간부 › <b style="color:#ffd600">A</b> 최상위·어센더스 › <b style="color:#ffd600">B</b> 중위·아카데미 정예 › <b style="color:#ffd600">C</b> 하위·미숙 › <b style="color:#ffd600">D</b> 비전투원급</div>
       </div>
 
-      <!-- 신문기사 -->
-      <div style="background:#f4ecd8;border:3px solid #111;padding:16px;color:#111;box-shadow:6px 6px 0 #111;font-family:'Noto Serif KR','Batang',Georgia,serif;line-height:1.65;word-break:keep-all;margin-bottom:18px;user-select:text">
+      <!-- 2. 히어로 타임즈 호외 신문기사 -->
+      <div style="background:#f4ecd8;border:3px solid #111;padding:16px;color:#111;box-shadow:6px 6px 0 #111;font-family:'Noto Serif KR','Batang',Georgia,serif;line-height:1.65;word-break:keep-all;margin-bottom:22px;user-select:text">
         <div style="text-align:center;font-size:30px;font-weight:900;letter-spacing:2px;border-top:4px double #111;padding-top:6px">THE HERO TIMES</div>
         <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;border-top:1px solid #111;border-bottom:3px double #111;padding:3px 0;margin-bottom:10px"><span>히어로 타임즈 · 뉴욕</span><span>★ SPECIAL EDITION ★</span><span>호외</span></div>
         <div style="text-align:center;font-size:24px;font-weight:900;line-height:1.3">영웅의 추락… '빌런의 시대' 열렸다</div>
@@ -1056,11 +1052,11 @@ function renderContent() {
         <div style="font-size:10px;color:#666;margin-top:4px">※ 본 기사는 사실 확인 중인 내용을 포함하고 있습니다.</div>
       </div>
 
-      <!-- 9대 주요 장소 갤러리 -->
-      <div style="background:#fff3c4 radial-gradient(rgba(0,0,0,.13) 1.2px,transparent 1.5px) 0 0/7px 7px;border:3px solid #111;border-radius:6px;padding:14px;color:#111;box-shadow:6px 6px 0 #111;user-select:text">
-        <div style="background:#e53935;color:#fff;border:2px solid #111;padding:3px 12px;display:inline-block;font-weight:900;transform:skew(-6deg);box-shadow:3px 3px 0 #111;margin-bottom:6px;font-size:16px">📍 KEY LOCATIONS (주요 무대 & 시설 9선)</div>
-        <div class="loc-grid">${locCardsHtml}</div>
+      <!-- 3. 세계관 단체 & 9대 주요 장소 상세 카드 -->
+      <div style="margin-bottom:8px;">
+        <div style="background:#e53935;color:#fff;border:2px solid #111;padding:4px 14px;display:inline-block;font-weight:900;transform:skew(-6deg);box-shadow:3px 3px 0 #111;font-size:16px">📍 FACTIONS & KEY LOCATIONS (주요 세력 및 무대)</div>
       </div>
+      <div class="loc-grid">${locCardsHtml}</div>
     `;
     return;
   }
